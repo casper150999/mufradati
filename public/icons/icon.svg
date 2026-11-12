@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="128" fill="#244D3B"/>
+  <circle cx="256" cy="256" r="180" fill="#1b3b2d"/>
+  <!-- Elegant Book Icon & Arabic Calligraphy Motif -->
+  <path d="M160 160h192c17.67 0 32 14.33 32 32v176c0 8.84-7.16 16-16 16s-16-7.16-16-16V208c0-8.84-7.16-16-16-16H160c-8.84 0-16-7.16-16-16s7.16-16 16-16z" fill="#D5B875"/>
+  <path d="M144 208h192c8.84 0 16 7.16 16 16v160c0 17.67-14.33 32-32 32H160c-17.67 0-32-14.33-32-32V224c0-8.84 7.16-16 16-16z" fill="#F7F8F5"/>
+  <text x="256" y="320" font-family="serif" font-size="72" font-weight="bold" fill="#244D3B" text-anchor="middle">م</text>
+</svg>

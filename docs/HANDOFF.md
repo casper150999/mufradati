@@ -10,34 +10,31 @@
 ---
 
 ## 2. Status Saat Ini
-- **Fase Aktif:** Selesai **PHASE 5 (Backup, Restore & PDF Export)**. Siap masuk **PHASE 6 (PWA & Offline Readiness)**.
-- **Progres Keseluruhan:** ~80%
+- **Fase Aktif:** Selesai **PHASE 6 (PWA & Offline Readiness)**. Siap masuk **PHASE 7 (Comprehensive Quality Assurance)** & **PHASE 8 (Deployment ke Cloudflare Pages)**.
+- **Progres Keseluruhan:** ~90%
 - **Status Build:** `npm run build` sukses 100% (0 error TypeScript, strict mode).
-- **Status Test:** PASS (Parser test & Backup validation test sukses 100%).
-- **Commit Terakhir:** `feat: implement json backup, restore with schema validation, and vector pdf print export (Phase 5)`
+- **Commit Terakhir:** `feat: implement web app manifest and offline service worker (Phase 6)`
 
 ---
 
 ## 3. Komponen yang Sudah Terpasang & Berfungsi
-1. **JSON Backup & Restore Engine (`backupService.ts`):**
-   - Ekspor seluruh database IndexedDB (kosakata, kategori, sequence nomor atomik) menjadi file `.json`.
-   - Validasi skema protektif sebelum pemulihan data (`validateBackupJson`).
-   - Opsi pemulihan fleksibel: **Timpa Seluruh Data** atau **Gabungkan Data**.
-2. **Ekspor & Cetak PDF Vektor Presisi:**
-   - Aturan stylesheet `@media print` terkonfigurasi dengan font lokal Amiri, RTL, dan `break-inside: avoid` untuk mencegah pemotongan kartu entri di batas halaman.
-3. **Modul Smart Paste & Preview:**
-   - Parser offline rule-based di `smartPasteParser.ts` dengan preservasi harakat 100%.
-   - Live interactive adjustment & Undo Last Import per batch.
+1. **PWA & Offline Architecture (`manifest.json` & `sw.js`):**
+   - Web App Manifest terpasang dengan theme color Forest Green `#244D3B`, background `#F7F8F5`, dan ikon SVG vektor mandiri.
+   - Service worker aktif dengan strategi caching offline untuk font lokal Amiri, dokumen HTML, dan bundle statis.
+2. **JSON Backup, Restore & Ekspor PDF:**
+   - Ekspor/Impor database lengkap dengan validasi skema integritas.
+   - Ekspor PDF presisi A4 dengan font Amiri lokal & RTL sempurna.
+3. **Smart Paste Engine & Preview:**
+   - Parser regex/tokenisasi baris offline tanpa biaya API, preservasi harakat 100%, preview interaktif, batch import & Undo Last Import.
 4. **Database & UI:**
-   - IndexedDB persisten, penomoran stabil, pencarian dwibahasa, dark/light mode, font scaler.
+   - Dexie IndexedDB persisten, sequence counter nomor global atomik, search index dwibahasa, dark/light mode, font scaler.
 
 ---
 
 ## 4. Langkah Teknis Selanjutnya (Immediate Next Actions)
-1. **PHASE 6 (PWA & Offline Readiness):**
-   - Buat file `public/manifest.json` (Nama: Mufradati, background `#F7F8F5`, theme `#244D3B`, ikon PWA).
-   - Buat service worker di `public/sw.js` untuk cache statis aset & font lokal.
-   - Daftarkan service worker di `main.tsx`.
+1. **PHASE 7 & 8 (QA & Deployment):**
+   - Jalankan verifikasi pengujian menyeluruh (TypeScript check, parser test, backup test).
+   - Buat panduan deployment Cloudflare Pages Free di repository.
 
 ---
 

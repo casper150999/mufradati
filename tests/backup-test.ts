@@ -50,3 +50,4 @@ try {
 } catch (err: any) {
   console.log('PASS: Invalid payload was properly rejected:', err.message);
 }
+

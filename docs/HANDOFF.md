@@ -1,44 +1,48 @@
 # AI CONTINUITY HANDOFF: MUFRADATI (مُفْرَدَاتِي)
-*Dokumen ini diperbarui secara berkala sebagai poros pemulihan sesi coding AI saat kuota terpotong.*
+*Dokumen ini merupakan catatan final serah terima proyek.*
 
 ---
 
-## 1. Identitas & Tujuan Proyek
+## 1. Identitas & Status Final Proyek
 - **Nama Proyek:** Mufradati (مُفْرَدَاتِي) — Personal Arabic Vocabulary Bank & Digital Vocabulary Book
-- **Fokus Utama:** Mengelola kosakata bahasa Arab pribadi seperti dokumen/buku digital elegan dengan fitur Smart Paste cerdas, preservasi teks Arab utuh, penomoran global stabil, zero-cost, dan offline-first.
+- **Status Akhir:** **SELESAI (100% dari Seluruh Fase 0 s/d 8)**
+- **Kondisi Kode:** Bersih, teruji, modular, 0 TypeScript error, siap deploy ke Cloudflare Pages Free.
 
 ---
 
-## 2. Status Saat Ini
-- **Fase Aktif:** Selesai **PHASE 6 (PWA & Offline Readiness)**. Siap masuk **PHASE 7 (Comprehensive Quality Assurance)** & **PHASE 8 (Deployment ke Cloudflare Pages)**.
-- **Progres Keseluruhan:** ~90%
-- **Status Build:** `npm run build` sukses 100% (0 error TypeScript, strict mode).
-- **Commit Terakhir:** `feat: implement web app manifest and offline service worker (Phase 6)`
+## 2. Checklist Kriteria Selesai (Spesifikasi Bagian 17)
+- [x] **Kriteria 1:** Aplikasi responsif desktop & mobile.
+- [x] **Kriteria 2:** Tampilan utama menyerupai buku digital continuous scroll elegan.
+- [x] **Kriteria 3:** Kosakata dapat ditambahkan manual atau via Smart Paste.
+- [x] **Kriteria 4 & 5:** Data tersimpan lokal di IndexedDB (Dexie) dan persisten setelah refresh/tutup tab.
+- [x] **Kriteria 6:** Manajemen kategori/bab aktif di sidebar.
+- [x] **Kriteria 7:** Penomoran global stabil menggunakan sequence counter atomik (tanpa reuse nomor).
+- [x] **Kriteria 8 & 9:** Smart Paste membaca format AI jamak dan nomor Arab/Latin.
+- [x] **Kriteria 10:** Modal preview dan koreksi manual sebelum batch commit.
+- [x] **Kriteria 11:** Harakat dan tanda baca Arab terjaga 100% utuh.
+- [x] **Kriteria 12:** Undo Last Import berjalan per batch ID.
+- [x] **Kriteria 13:** Pencarian dwibahasa (Arab gundul/berharakat & Indonesia).
+- [x] **Kriteria 14:** Backup dan Restore JSON dengan validasi skema integritas.
+- [x] **Kriteria 15:** Ekspor dan cetak PDF vektor presisi tinggi dengan font Amiri lokal & RTL.
+- [x] **Kriteria 16:** Web App Manifest & Service Worker untuk instalasi PWA.
+- [x] **Kriteria 17:** Berfungsi offline penuh tanpa koneksi internet.
+- [x] **Kriteria 18:** 0 bug kritis (seluruh automated tests PASS).
+- [x] **Kriteria 19:** Dokumentasi proyek lengkap di folder `docs/`.
+- [x] **Kriteria 20:** Panduan deployment Cloudflare Pages Free tersedia di `docs/DEPLOYMENT.md`.
 
 ---
 
-## 3. Komponen yang Sudah Terpasang & Berfungsi
-1. **PWA & Offline Architecture (`manifest.json` & `sw.js`):**
-   - Web App Manifest terpasang dengan theme color Forest Green `#244D3B`, background `#F7F8F5`, dan ikon SVG vektor mandiri.
-   - Service worker aktif dengan strategi caching offline untuk font lokal Amiri, dokumen HTML, dan bundle statis.
-2. **JSON Backup, Restore & Ekspor PDF:**
-   - Ekspor/Impor database lengkap dengan validasi skema integritas.
-   - Ekspor PDF presisi A4 dengan font Amiri lokal & RTL sempurna.
-3. **Smart Paste Engine & Preview:**
-   - Parser regex/tokenisasi baris offline tanpa biaya API, preservasi harakat 100%, preview interaktif, batch import & Undo Last Import.
-4. **Database & UI:**
-   - Dexie IndexedDB persisten, sequence counter nomor global atomik, search index dwibahasa, dark/light mode, font scaler.
-
----
-
-## 4. Langkah Teknis Selanjutnya (Immediate Next Actions)
-1. **PHASE 7 & 8 (QA & Deployment):**
-   - Jalankan verifikasi pengujian menyeluruh (TypeScript check, parser test, backup test).
-   - Buat panduan deployment Cloudflare Pages Free di repository.
-
----
-
-## 5. Keputusan Mutlak yang Dilarang Diubah
-- Dilarang menggunakan API AI berbayar (Zero-Cost).
-- Dilarang menghilangkan harakat/tanda baca Arab saat parsing atau penyimpanan.
-- Penomoran kosakata harus stabil dan global menggunakan sequence atomik.
+## 3. Perintah Verifikasi & Menjalankan Aplikasi
+- **Menjalankan Dev Server:**
+  ```bash
+  npm run dev
+  ```
+- **Menjalankan Build Produksi:**
+  ```bash
+  npm run build
+  ```
+- **Menjalankan Pengujian Mandiri:**
+  ```bash
+  node --experimental-strip-types tests/smart-paste-test.ts
+  node --experimental-strip-types tests/backup-test.ts
+  ```

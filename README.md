@@ -49,3 +49,4 @@ Salin teks berikut jika membuka sesi baru:
 - [Decision Records](file:///d:/Documents/Kosakata%20Bahasa%20Arab%20app/docs/DECISIONS.md)
 - [Testing Log](file:///d:/Documents/Kosakata%20Bahasa%20Arab%20app/docs/TESTING.md)
 - [AI Handoff](file:///d:/Documents/Kosakata%20Bahasa%20Arab%20app/docs/HANDOFF.md)
+

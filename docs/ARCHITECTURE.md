@@ -103,3 +103,4 @@ db.version(1).stores({
 ## 4. Keamanan Data & Transaksi
 - Penambahan kosakata baru selalu dijalankan di dalam transaksi Dexie (`db.transaction('rw', [db.vocabularies, db.sequences, db.import_batches], ...)`).
 - `lastVocabularyNumber` selalu diperbarui secara inkremental dari nilai tersimpan di `sequences`, memastikan tidak pernah terjadi duplikasi nomor meskipun terjadi impor paralel.
+

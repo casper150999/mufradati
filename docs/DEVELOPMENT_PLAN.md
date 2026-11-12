@@ -58,3 +58,4 @@
 - [ ] Konfigurasi build Cloudflare Pages
 - [ ] Dokumentasi penggunaan dan panduan deployment
 - [ ] Finalisasi checkpoint dan serah terima proyek
+

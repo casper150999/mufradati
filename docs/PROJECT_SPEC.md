@@ -59,3 +59,4 @@ Mufradati adalah aplikasi bank kosakata bahasa Arab pribadi yang berfungsi sebag
 - **Zero-Cost:** Rp0 biaya wajib. Bebas API berbayar, bebas backend server berbayar.
 - **Local-First & Offline-First:** Menggunakan IndexedDB (Dexie.js), Font lokal, PWA Service Worker caching.
 - **Frontend Stack:** React 19 / TypeScript / Vite / Tailwind CSS / Lucide React.
+

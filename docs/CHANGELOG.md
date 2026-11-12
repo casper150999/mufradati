@@ -14,3 +14,4 @@ Semua perubahan dan tonggak kemajuan dicatat di sini.
 - `docs/TESTING.md`: Strategi dan log pengujian.
 - `docs/HANDOFF.md`: Dokumen pemulihan kontinuitas AI.
 - `README.md`: Dokumen pengenalan dan prompt pemulihan sesi AI.
+

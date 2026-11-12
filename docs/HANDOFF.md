@@ -10,36 +10,33 @@
 ---
 
 ## 2. Status Saat Ini
-- **Fase Aktif:** Selesai PHASE 0 (Project Discovery & Documentation), Siap Eksekusi PHASE 1 (Project Foundation & Setup).
-- **Progres Keseluruhan:** ~8%
-- **Status Build:** Belum ada build (folder proyek baru siap diinisialisasi dengan Vite).
-- **Commit Terakhir:** Menunggu inisialisasi git pada Phase 1.
+- **Fase Aktif:** Selesai PHASE 1 (Foundation) & PHASE 2 (UI Foundation). Siap memulai **PHASE 3 (Database Engine & Sequence Counter)**.
+- **Progres Keseluruhan:** ~25%
+- **Status Build:** `npm run build` sukses 100% (TypeScript strict mode, 0 warning/error).
+- **Commit Terakhir:** `feat: implement project foundation, local amiri fonts, and digital book layout (Phase 1 & 2)`
 
 ---
 
-## 3. Dokumen Arsitektur & Spesifikasi
-Sebelum memulai pekerjaan di sesi baru, wajib membaca file berikut:
-- [PROJECT_SPEC.md](file:///d:/Documents/Kosakata%20Bahasa%20Arab%20app/docs/PROJECT_SPEC.md)
-- [ARCHITECTURE.md](file:///d:/Documents/Kosakata%20Bahasa%20Arab%20app/docs/ARCHITECTURE.md)
-- [DEVELOPMENT_PLAN.md](file:///d:/Documents/Kosakata%20Bahasa%20Arab%20app/docs/DEVELOPMENT_PLAN.md)
-- [PROGRESS.md](file:///d:/Documents/Kosakata%20Bahasa%20Arab%20app/docs/PROGRESS.md)
-- [DECISIONS.md](file:///d:/Documents/Kosakata%20Bahasa%20Arab%20app/docs/DECISIONS.md)
+## 3. Komponen yang Sudah Terpasang & Berfungsi
+1. **Frontend Foundation:** Vite + React 19 + TypeScript + Tailwind CSS v4.
+2. **Offline Font Engine:** Font Arab `Amiri-Regular.ttf` dan `Amiri-Bold.ttf` lokal di `public/fonts/` dengan `@font-face` terpasang.
+3. **Design System:** Palet Forest Green (`#244D3B`), Warm Gold (`#D5B875`), Surface Warm (`#F8F7F1`), Dark mode ready.
+4. **UI Digital Book:** Sidebar daftar isi bab, search bar, kontrol font scaler teks Arab, tampilan entri kosakata continuous scroll dengan badge bentuk kata (Madhi, Mudhari', Mashdar) dan contoh kalimat bernomor `①, ②, ③`.
+5. **Dependensi Inti:** `dexie` v4, `lucide-react`, `clsx`, `tailwind-merge` sudah terpasang.
 
 ---
 
 ## 4. Langkah Teknis Selanjutnya (Immediate Next Actions)
-1. **Inisialisasi Project (Phase 1):**
-   - Jalankan `npm create vite@latest . -- --template react-ts` di direktori proyek.
-   - Instal dependensi dasar: `lucide-react`, `dexie`, `clsx`, `tailwind-merge`.
-   - Setup Tailwind CSS v3/v4 dengan konfigurasi warna Forest Green `#244D3B`, Warm Gold `#D5B875`, Surface `#F7F8F5`.
-   - Siapkan aset font lokal Amiri (`Amiri-Regular.ttf`, `Amiri-Bold.ttf`) dan Inter di `public/fonts/`.
-   - Setup `@font-face` di CSS.
-   - Verifikasi build dengan `npm run build`.
-   - Buat Git repository awal (`git init`, commit: `chore: initialize project foundation`).
+1. **PHASE 3 (Database Engine):**
+   - Buat modul `src/database/db.ts` menggunakan Dexie.js.
+   - Buat sequence manager untuk penomoran global stabil (menggunakan tabel `sequences` dengan key `vocabulary_number`).
+   - Buat seed initial categories ("Umum", "Perilaku & Akhlak", "Pendidikan & Belajar").
+   - Buat custom hook `useVocabulary` dan `useCategories` untuk CRUD data asli ke IndexedDB.
+   - Gantikan mock data di `App.tsx` dengan data riil dari IndexedDB.
 
 ---
 
 ## 5. Keputusan Mutlak yang Dilarang Diubah
 - Dilarang menggunakan API AI berbayar (Zero-Cost).
-- Dilarang menghilangkan harakat/tanda baca Arab saat parsing.
+- Dilarang menghilangkan harakat/tanda baca Arab saat parsing atau penyimpanan.
 - Penomoran kosakata harus stabil dan global menggunakan sequence atomik.

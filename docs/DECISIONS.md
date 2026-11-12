@@ -28,3 +28,4 @@
 - **Status:** Diterima
 - **Konteks:** Mengikuti ketentuan Zero-Cost, dilarang menggunakan API LLM berbayar (OpenAI, Gemini API, dll.) untuk parsing di runtime.
 - **Keputusan:** Membangun tokenizer berbasis baris dan ekspresi reguler Unicode di TypeScript yang mampu mengidentifikasi format angka (Latin & Arab-Indic), label arti, dan pasangan contoh kalimat secara cerdas, dengan preview interaktif untuk koreksi manual sebelum penyimpanan.
+

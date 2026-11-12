@@ -10,29 +10,29 @@
 ---
 
 ## 2. Status Saat Ini
-- **Fase Aktif:** Selesai PHASE 1 (Foundation) & PHASE 2 (UI Foundation). Siap memulai **PHASE 3 (Database Engine & Sequence Counter)**.
-- **Progres Keseluruhan:** ~25%
-- **Status Build:** `npm run build` sukses 100% (TypeScript strict mode, 0 warning/error).
-- **Commit Terakhir:** `feat: implement project foundation, local amiri fonts, and digital book layout (Phase 1 & 2)`
+- **Fase Aktif:** Selesai **PHASE 3 (Database Engine & Core Vocabulary Management)**. Siap masuk **PHASE 4 (Smart Paste Engine & Batch Parser)**.
+- **Progres Keseluruhan:** ~45%
+- **Status Build:** `npm run build` sukses 100% (0 error TypeScript, strict mode).
+- **Commit Terakhir:** `feat: implement indexeddb storage, atomic sequence numbering, and vocabulary crud (Phase 3)`
 
 ---
 
 ## 3. Komponen yang Sudah Terpasang & Berfungsi
-1. **Frontend Foundation:** Vite + React 19 + TypeScript + Tailwind CSS v4.
-2. **Offline Font Engine:** Font Arab `Amiri-Regular.ttf` dan `Amiri-Bold.ttf` lokal di `public/fonts/` dengan `@font-face` terpasang.
-3. **Design System:** Palet Forest Green (`#244D3B`), Warm Gold (`#D5B875`), Surface Warm (`#F8F7F1`), Dark mode ready.
-4. **UI Digital Book:** Sidebar daftar isi bab, search bar, kontrol font scaler teks Arab, tampilan entri kosakata continuous scroll dengan badge bentuk kata (Madhi, Mudhari', Mashdar) dan contoh kalimat bernomor `①, ②, ③`.
-5. **Dependensi Inti:** `dexie` v4, `lucide-react`, `clsx`, `tailwind-merge` sudah terpasang.
+1. **IndexedDB Engine via Dexie.js:** Database `MufradatiDB` dengan tabel `vocabularies`, `categories`, `import_batches`, `sequences`, dan `user_settings`.
+2. **Atomic Sequence Numbering:** Generator angka urut stabil di `db.ts` (`getNextVocabularyNumbers`) yang menjamin nomor kosakata naik secara berurutan dan tidak pernah di-reuse.
+3. **Arabic Search Index:** Service `buildSearchIndex` & `stripArabicDiacritics` di `arabic-utils.ts` yang membuat pencarian cepat baik mengetik teks dengan harakat maupun teks gundul (tanpa mengubah teks asli di database).
+4. **Vocabulary CRUD & Filter:** Modal tambah entri manual (`VocabularyFormModal.tsx`), filter bab/kategori dinamis, bookmarking toggle, dan hapus entri.
+5. **UI Digital Book:** Menampilkan nomor urut global `001`, bentuk kata tambahan, dan Jumlah Mufidah `①, ②, ③` langsung dari data IndexedDB persisten.
 
 ---
 
 ## 4. Langkah Teknis Selanjutnya (Immediate Next Actions)
-1. **PHASE 3 (Database Engine):**
-   - Buat modul `src/database/db.ts` menggunakan Dexie.js.
-   - Buat sequence manager untuk penomoran global stabil (menggunakan tabel `sequences` dengan key `vocabulary_number`).
-   - Buat seed initial categories ("Umum", "Perilaku & Akhlak", "Pendidikan & Belajar").
-   - Buat custom hook `useVocabulary` dan `useCategories` untuk CRUD data asli ke IndexedDB.
-   - Gantikan mock data di `App.tsx` dengan data riil dari IndexedDB.
+1. **PHASE 4 (Smart Paste Engine):**
+   - Buat file parser TypeScript `src/features/smart-paste/smartPasteParser.ts`.
+   - Bangun rule-based tokenizer: deteksi nomor Latin/Arab, pemisah entri, kata Arab, makna, bentuk kata, dan pasangan Jumlah Mufidah.
+   - Buat UI `SmartPasteModal.tsx` dengan textarea input dan Live Interactive Preview (memungkinkan koreksi baris sebelum commit).
+   - Buat handler batch import di database dengan penomoran atomik berurutan serta penyimpanan `importBatchId`.
+   - Buat fitur "Undo Last Import" per batch ID.
 
 ---
 

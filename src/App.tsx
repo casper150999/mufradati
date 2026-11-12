@@ -10,74 +10,40 @@ import {
   Sun, 
   Folder, 
   Download,
-  Trash2,
-  Edit3
+  Trash2
 } from 'lucide-react';
+import { useMufradati } from './hooks/useMufradati.ts';
+import { VocabularyFormModal } from './features/vocabulary/VocabularyFormModal.tsx';
 
 export function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [arabicFontSize, setArabicFontSize] = useState(36);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  // Sample vocabulary data adhering to spec
-  const sampleVocabulary = [
-    {
-      id: '1',
-      number: 311,
-      arabic: 'غَشَّ - يَغُشُّ',
-      forms: [
-        { label: 'Madhi', value: 'غَشَّ' },
-        { label: 'Mudhari\'', value: 'يَغُشُّ' },
-        { label: 'Mashdar', value: 'غَشًّا' }
-      ],
-      meaning: 'Menyontek / Menipu',
-      category: 'Perilaku & Akhlak',
-      bookmarked: false,
-      examples: [
-        {
-          id: 'e1',
-          arabic: 'حَرَّمَ الإِسْلَامُ أَنْ يَغُشَّ الطَّالِبُ فِي الِامْتِحَانِ.',
-          translation: 'Islam mengharamkan siswa untuk menyontek dalam ujian.'
-        },
-        {
-          id: 'e2',
-          arabic: 'لَمْ يَغُشَّ زَيْدٌ فِي الِاخْتِبَارِ لِأَنَّهُ مَاهِرٌ.',
-          translation: 'Zaid tidak menyontek saat ujian karena dia pintar.'
-        },
-        {
-          id: 'e3',
-          arabic: 'مَنْ غَشَّنَا فَلَيْسَ مِنَّا.',
-          translation: 'Barang siapa yang menipu/menyontek kami, maka ia bukan dari golongan kami.'
-        }
-      ]
-    },
-    {
-      id: '2',
-      number: 312,
-      arabic: 'اِجْتَهَدَ - يَجْتَهِدُ',
-      forms: [
-        { label: 'Madhi', value: 'اِجْتَهَدَ' },
-        { label: 'Mudhari\'', value: 'يَجْتَهِدُ' },
-        { label: 'Mashdar', value: 'اِجْتِهَادًا' }
-      ],
-      meaning: 'Bersungguh-sungguh / Berjuang keras',
-      category: 'Pendidikan & Belajar',
-      bookmarked: true,
-      examples: [
-        {
-          id: 'e4',
-          arabic: 'يَجْتَهِدُ التِّلْمِيذُ فِي دِرَاسَتِهِ لِيَنْجَحَ فِي الِامْتِحَانِ.',
-          translation: 'Murid itu bersungguh-sungguh dalam belajarnya agar lulus ujian.'
-        },
-        {
-          id: 'e5',
-          arabic: 'مَنْ جَدَّ وَجَدَ، وَمَنِ اجْتَهَدَ حَصَدَ.',
-          translation: 'Barang siapa bersungguh-sungguh dia akan berhasil, dan siapa yang berjuang dia akan menuai hasilnya.'
-        }
-      ]
-    }
-  ];
+  const {
+    vocabularies,
+    allVocabularies,
+    categories,
+    loading,
+    activeCategory,
+    setActiveCategory,
+    searchQuery,
+    setSearchQuery,
+    bookmarkedOnly,
+    setBookmarkedOnly,
+    addVocabulary,
+    deleteVocabulary,
+    toggleBookmark,
+    seedSampleEntryIfEmpty
+  } = useMufradati();
+
+  // Helper mapping category name
+  const getCategoryName = (categoryId: string) => {
+    const cat = categories.find(c => c.id === categoryId);
+    return cat ? cat.name : 'Umum';
+  };
+
+  const bookmarkCount = allVocabularies.filter(v => v.bookmarked).length;
 
   return (
     <div className={`min-h-screen ${darkMode ? 'dark bg-[#141D18] text-[#E8ECE9]' : 'bg-[#F7F8F5] text-[#27332C]'}`}>
@@ -113,9 +79,12 @@ export function App() {
               <Sparkles className="w-4 h-4 text-[#D5B875]" />
               <span>Smart Paste AI</span>
             </button>
-            <button className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 dark:border-white/20 hover:bg-white dark:hover:bg-white/5 rounded-xl font-medium text-xs text-gray-700 dark:text-gray-300 transition-colors">
+            <button 
+              onClick={() => setIsAddModalOpen(true)}
+              className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 dark:border-white/20 hover:bg-white dark:hover:bg-white/5 rounded-xl font-medium text-xs text-gray-700 dark:text-gray-300 transition-colors"
+            >
               <Plus className="w-3.5 h-3.5" />
-              <span>Tambah Manual</span>
+              <span>Tambah Kosakata Manual</span>
             </button>
           </div>
 
@@ -123,13 +92,18 @@ export function App() {
           <div className="flex-1 overflow-y-auto p-4">
             <div className="flex items-center justify-between text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 px-2">
               <span>Daftar Isi / Bab</span>
-              <span className="text-[11px] bg-gray-200/70 dark:bg-white/10 py-0.5 px-2 rounded-full">3 Bab</span>
+              <span className="text-[11px] bg-gray-200/70 dark:bg-white/10 py-0.5 px-2 rounded-full">
+                {categories.length} Bab
+              </span>
             </div>
             <nav className="space-y-1">
               <button 
-                onClick={() => setSelectedCategory('all')}
+                onClick={() => {
+                  setActiveCategory('all');
+                  setBookmarkedOnly(false);
+                }}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                  selectedCategory === 'all' 
+                  activeCategory === 'all' && !bookmarkedOnly
                     ? 'bg-[#244D3B]/10 dark:bg-[#D5B875]/20 text-[#244D3B] dark:text-[#D5B875]' 
                     : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-white/5'
                 }`}
@@ -138,44 +112,42 @@ export function App() {
                   <Folder className="w-4 h-4 opacity-70" />
                   <span>Semua Kosakata</span>
                 </div>
-                <span className="text-xs bg-black/5 dark:bg-white/10 px-2 py-0.5 rounded-full font-mono">2</span>
+                <span className="text-xs bg-black/5 dark:bg-white/10 px-2 py-0.5 rounded-full font-mono">
+                  {allVocabularies.length}
+                </span>
               </button>
 
-              <button 
-                onClick={() => setSelectedCategory('Perilaku & Akhlak')}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                  selectedCategory === 'Perilaku & Akhlak' 
-                    ? 'bg-[#244D3B]/10 dark:bg-[#D5B875]/20 text-[#244D3B] dark:text-[#D5B875]' 
-                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-white/5'
-                }`}
-              >
-                <div className="flex items-center gap-2.5 truncate">
-                  <Folder className="w-4 h-4 opacity-70" />
-                  <span className="truncate">Perilaku & Akhlak</span>
-                </div>
-                <span className="text-xs bg-black/5 dark:bg-white/10 px-2 py-0.5 rounded-full font-mono">1</span>
-              </button>
-
-              <button 
-                onClick={() => setSelectedCategory('Pendidikan & Belajar')}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                  selectedCategory === 'Pendidikan & Belajar' 
-                    ? 'bg-[#244D3B]/10 dark:bg-[#D5B875]/20 text-[#244D3B] dark:text-[#D5B875]' 
-                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-white/5'
-                }`}
-              >
-                <div className="flex items-center gap-2.5 truncate">
-                  <Folder className="w-4 h-4 opacity-70" />
-                  <span className="truncate">Pendidikan & Belajar</span>
-                </div>
-                <span className="text-xs bg-black/5 dark:bg-white/10 px-2 py-0.5 rounded-full font-mono">1</span>
-              </button>
+              {categories.map((cat) => {
+                const count = allVocabularies.filter(v => v.categoryId === cat.id).length;
+                return (
+                  <button 
+                    key={cat.id}
+                    onClick={() => {
+                      setActiveCategory(cat.id);
+                      setBookmarkedOnly(false);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                      activeCategory === cat.id && !bookmarkedOnly
+                        ? 'bg-[#244D3B]/10 dark:bg-[#D5B875]/20 text-[#244D3B] dark:text-[#D5B875]' 
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-white/5'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 truncate">
+                      <Folder className="w-4 h-4 opacity-70" />
+                      <span className="truncate">{cat.name}</span>
+                    </div>
+                    <span className="text-xs bg-black/5 dark:bg-white/10 px-2 py-0.5 rounded-full font-mono">
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
             </nav>
           </div>
 
           {/* Sidebar Footer */}
           <div className="p-4 border-t border-gray-200/60 dark:border-white/10 flex items-center justify-between text-xs text-gray-500">
-            <span>Mufradati v1.0</span>
+            <span>Mufradati v1.0 (IndexedDB)</span>
             <div className="flex items-center gap-2">
               <button title="Backup & Restore" className="p-1.5 hover:bg-gray-200/60 dark:hover:bg-white/10 rounded-lg">
                 <Download className="w-3.5 h-3.5" />
@@ -196,7 +168,7 @@ export function App() {
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Cari kata Arab, arti Indonesia, atau contoh kalimat..."
+                placeholder="Cari kata Arab, arti Indonesia, atau kalimat..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-4 py-2 bg-gray-100/80 dark:bg-white/5 border border-transparent focus:border-[#244D3B] dark:focus:border-[#D5B875] rounded-xl text-sm outline-none transition-all"
@@ -222,9 +194,16 @@ export function App() {
                 </button>
               </div>
 
-              <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 border border-gray-200/60 dark:border-white/10">
-                <Bookmark className="w-3.5 h-3.5 text-[#D5B875]" />
-                <span>Bookmark (1)</span>
+              <button 
+                onClick={() => setBookmarkedOnly(!bookmarkedOnly)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-xl border transition-colors ${
+                  bookmarkedOnly 
+                    ? 'bg-[#D5B875]/20 border-[#D5B875] text-[#244D3B] dark:text-[#D5B875]' 
+                    : 'border-gray-200/60 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5'
+                }`}
+              >
+                <Bookmark className={`w-3.5 h-3.5 ${bookmarkedOnly ? 'fill-[#D5B875] text-[#D5B875]' : 'text-[#D5B875]'}`} />
+                <span>Bookmark ({bookmarkCount})</span>
               </button>
             </div>
           </header>
@@ -236,16 +215,45 @@ export function App() {
               {/* Book Header Section */}
               <div className="border-b-2 border-[#244D3B]/20 dark:border-white/10 pb-6 mb-8 text-center">
                 <span className="inline-block px-3 py-1 bg-[#244D3B]/10 dark:bg-[#D5B875]/20 text-[#244D3B] dark:text-[#D5B875] text-xs font-semibold rounded-full mb-2">
-                  Buku Kosakata Bahasa Arab
+                  Buku Kosakata Bahasa Arab Digital
                 </span>
-                <h2 className="text-2xl font-bold tracking-tight">Koleksi Kosakata Terpilih</h2>
+                <h2 className="text-2xl font-bold tracking-tight">
+                  {bookmarkedOnly 
+                    ? 'Daftar Kosakata Ditandai (Bookmarks)' 
+                    : activeCategory === 'all' 
+                      ? 'Seluruh Koleksi Kosakata' 
+                      : `Bab: ${getCategoryName(activeCategory)}`}
+                </h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                   Membaca dokumen digital berkelanjutan dengan presisi harakat dan makna.
                 </p>
               </div>
 
+              {/* Empty State */}
+              {vocabularies.length === 0 && !loading && (
+                <div className="text-center py-16 px-4 border-2 border-dashed border-gray-200 dark:border-white/10 rounded-2xl space-y-4">
+                  <div className="w-12 h-12 rounded-full bg-[#244D3B]/10 text-[#244D3B] dark:text-[#D5B875] flex items-center justify-center mx-auto">
+                    <BookOpen className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-semibold text-lg">Belum Ada Kosakata</h3>
+                  <p className="text-sm text-gray-500 max-w-md mx-auto">
+                    {searchQuery 
+                      ? `Tidak ditemukan kosakata yang cocok dengan kata kunci "${searchQuery}".` 
+                      : 'Mulai bangun buku kosakata Anda dengan menambahkan entri manual atau gunakan Smart Paste.'}
+                  </p>
+                  {!searchQuery && allVocabularies.length === 0 && (
+                    <button
+                      onClick={seedSampleEntryIfEmpty}
+                      className="px-4 py-2 bg-[#244D3B] text-white rounded-xl text-xs font-medium hover:bg-[#1c3c2e] transition-colors"
+                    >
+                      Muat Contoh Kosakata (311. غَشَّ - يَغُشُّ)
+                    </button>
+                  )}
+                </div>
+              )}
+
               {/* Vocabulary Entries */}
-              {sampleVocabulary.map((item) => (
+              {vocabularies.map((item) => (
                 <article 
                   key={item.id}
                   className="bg-white dark:bg-[#1C2621] rounded-2xl p-7 shadow-sm border border-gray-200/80 dark:border-white/10 hover:border-[#244D3B]/40 dark:hover:border-[#D5B875]/40 transition-all duration-200"
@@ -257,18 +265,23 @@ export function App() {
                         {String(item.number).padStart(3, '0')}
                       </span>
                       <span className="text-xs px-2.5 py-1 bg-[#4F8067]/10 dark:bg-[#4F8067]/20 text-[#4F8067] dark:text-[#8ac2a5] rounded-full font-medium">
-                        {item.category}
+                        {getCategoryName(item.categoryId)}
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <button className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-gray-400 hover:text-gray-600 transition-colors">
-                        <Edit3 className="w-4 h-4" />
-                      </button>
-                      <button className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-gray-400 hover:text-red-500 transition-colors">
+                      <button 
+                        onClick={() => deleteVocabulary(item.id)}
+                        className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 text-gray-400 hover:text-red-500 transition-colors"
+                        title="Hapus Kosakata"
+                      >
                         <Trash2 className="w-4 h-4" />
                       </button>
-                      <button className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+                      <button 
+                        onClick={() => toggleBookmark(item.id)}
+                        className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition-colors"
+                        title={item.bookmarked ? 'Hapus dari bookmark' : 'Tandai bookmark'}
+                      >
                         <Bookmark className={`w-4 h-4 ${item.bookmarked ? 'fill-[#D5B875] text-[#D5B875]' : 'text-gray-400'}`} />
                       </button>
                     </div>
@@ -296,7 +309,7 @@ export function App() {
                     </div>
 
                     {/* Word Forms (Fi'il / Jamak / Mashdar) */}
-                    {item.forms && (
+                    {item.forms && item.forms.length > 0 && (
                       <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t border-dashed border-gray-100 dark:border-white/5">
                         {item.forms.map((form, fIdx) => (
                           <div key={fIdx} className="flex items-center gap-1.5 bg-[#F8F7F1] dark:bg-[#222F29] px-2.5 py-1 rounded-lg border border-gray-200/50 dark:border-white/5 text-xs">
@@ -309,56 +322,70 @@ export function App() {
                   </div>
 
                   {/* Examples Section (Jumlah Mufidah) */}
-                  <div className="mt-4 pt-4 border-t border-gray-100 dark:border-white/5">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-xs font-bold uppercase tracking-wider text-[#4F8067] dark:text-[#D5B875]">
-                        Jumlah Mufidah (Contoh Kalimat)
-                      </span>
-                      <span className="text-[11px] text-gray-400">({item.examples.length} kalimat)</span>
-                    </div>
+                  {item.examples && item.examples.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-gray-100 dark:border-white/5">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-xs font-bold uppercase tracking-wider text-[#4F8067] dark:text-[#D5B875]">
+                          Jumlah Mufidah (Contoh Kalimat)
+                        </span>
+                        <span className="text-[11px] text-gray-400">({item.examples.length} kalimat)</span>
+                      </div>
 
-                    <div className="space-y-4">
-                      {item.examples.map((example, eIdx) => {
-                        const circledNumbers = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩'];
-                        return (
-                          <div key={example.id} className="p-3.5 rounded-xl bg-[#F8F7F1]/60 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 space-y-1.5">
-                            {/* Arabic Sentence */}
-                            <div className="flex items-start justify-end gap-2 text-right" dir="rtl">
-                              <span className="text-[#244D3B] dark:text-[#D5B875] font-bold text-base select-none">
-                                {circledNumbers[eIdx] || `(${eIdx + 1})`}
-                              </span>
-                              <p 
-                                className="font-arabic font-medium text-gray-800 dark:text-gray-100 leading-loose"
-                                style={{ fontSize: `${Math.round(arabicFontSize * 0.72)}px` }}
-                              >
-                                {example.arabic}
+                      <div className="space-y-4">
+                        {item.examples.map((example, eIdx) => {
+                          const circledNumbers = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩'];
+                          return (
+                            <div key={example.id} className="p-3.5 rounded-xl bg-[#F8F7F1]/60 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 space-y-1.5">
+                              {/* Arabic Sentence */}
+                              <div className="flex items-start justify-end gap-2 text-right" dir="rtl">
+                                <span className="text-[#244D3B] dark:text-[#D5B875] font-bold text-base select-none">
+                                  {circledNumbers[eIdx] || `(${eIdx + 1})`}
+                                </span>
+                                <p 
+                                  className="font-arabic font-medium text-gray-800 dark:text-gray-100 leading-loose"
+                                  style={{ fontSize: `${Math.round(arabicFontSize * 0.72)}px` }}
+                                >
+                                  {example.arabic}
+                                </p>
+                              </div>
+
+                              {/* Indonesian Translation */}
+                              <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 pl-2 leading-relaxed">
+                                {example.translation}
                               </p>
                             </div>
-
-                            {/* Indonesian Translation */}
-                            <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 pl-2 leading-relaxed">
-                              {example.translation}
-                            </p>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                 </article>
               ))}
 
               {/* End of Document Bookmark Notice */}
-              <div className="text-center py-10 text-xs text-gray-400 flex flex-col items-center gap-2">
-                <div className="w-12 h-0.5 bg-gray-200 dark:bg-white/10 rounded-full"></div>
-                <span>Akhir dokumen buku kosakata</span>
-              </div>
+              {vocabularies.length > 0 && (
+                <div className="text-center py-10 text-xs text-gray-400 flex flex-col items-center gap-2">
+                  <div className="w-12 h-0.5 bg-gray-200 dark:bg-white/10 rounded-full"></div>
+                  <span>Akhir dokumen buku kosakata ({vocabularies.length} entri dimuat)</span>
+                </div>
+              )}
 
             </div>
           </div>
         </main>
 
       </div>
+
+      {/* MODAL: Tambah Kosakata Manual */}
+      <VocabularyFormModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        categories={categories}
+        onSubmit={async (data) => {
+          await addVocabulary(data);
+        }}
+      />
     </div>
   );
 }

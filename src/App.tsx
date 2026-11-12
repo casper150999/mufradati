@@ -8,15 +8,17 @@ import {
   Moon, 
   Sun, 
   Folder, 
-  Download,
-  Trash2,
-  RotateCcw,
-  Printer
+  Download, 
+  Trash2, 
+  RotateCcw, 
+  Printer, 
+  FolderPlus 
 } from 'lucide-react';
 import { useMufradati } from './hooks/useMufradati.ts';
 import { VocabularyFormModal } from './features/vocabulary/VocabularyFormModal.tsx';
 import { SmartPasteModal } from './features/smart-paste/SmartPasteModal.tsx';
 import { BackupModal } from './features/backup/BackupModal.tsx';
+import { CategoryManagerModal } from './features/categories/CategoryManagerModal.tsx';
 
 export function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -24,6 +26,7 @@ export function App() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isSmartPasteOpen, setIsSmartPasteOpen] = useState(false);
   const [isBackupOpen, setIsBackupOpen] = useState(false);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [undoNotice, setUndoNotice] = useState<string | null>(null);
 
   const {
@@ -41,6 +44,9 @@ export function App() {
     addBatchVocabularies,
     undoLastImport,
     deleteVocabulary,
+    addCategory,
+    updateCategory,
+    deleteCategory,
     toggleBookmark,
     seedSampleEntryIfEmpty
   } = useMufradati();
@@ -119,9 +125,14 @@ export function App() {
           <div className="flex-1 overflow-y-auto p-4">
             <div className="flex items-center justify-between text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 px-2">
               <span>Daftar Isi / Bab</span>
-              <span className="text-[11px] bg-gray-200/70 dark:bg-white/10 py-0.5 px-2 rounded-full">
-                {categories.length} Bab
-              </span>
+              <button
+                onClick={() => setIsCategoryModalOpen(true)}
+                className="text-[11px] bg-gray-200/70 hover:bg-[#244D3B]/20 dark:bg-white/10 py-0.5 px-2 rounded-full flex items-center gap-1 transition-colors"
+                title="Kelola Bab Kosakata"
+              >
+                <FolderPlus className="w-3 h-3 text-[#244D3B] dark:text-[#D5B875]" />
+                <span>{categories.length} Bab</span>
+              </button>
             </div>
             <nav className="space-y-1">
               <button 
@@ -464,6 +475,17 @@ export function App() {
             window.print();
           }, 300);
         }}
+      />
+
+      {/* MODAL: Kelola Bab / Kategori */}
+      <CategoryManagerModal
+        isOpen={isCategoryModalOpen}
+        onClose={() => setIsCategoryModalOpen(false)}
+        categories={categories}
+        allVocabularies={allVocabularies}
+        onAddCategory={addCategory}
+        onUpdateCategory={updateCategory}
+        onDeleteCategory={deleteCategory}
       />
     </div>
   );

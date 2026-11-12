@@ -232,6 +232,54 @@ export function useMufradati() {
     }
   };
 
+  // Category Management
+  const addCategory = async (name: string): Promise<Category> => {
+    const highestOrder = categories.length > 0 
+      ? Math.max(...categories.map(c => c.order)) 
+      : 0;
+
+    const newCat: Category = {
+      id: crypto.randomUUID(),
+      name,
+      order: highestOrder + 1,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    await db.categories.add(newCat);
+    await refreshData();
+    return newCat;
+  };
+
+  const updateCategory = async (id: string, name: string): Promise<void> => {
+    await db.categories.update(id, {
+      name,
+      updatedAt: new Date().toISOString()
+    });
+    await refreshData();
+  };
+
+  const deleteCategory = async (id: string, transferTargetCategoryId?: string): Promise<void> => {
+    await db.transaction('rw', [db.categories, db.vocabularies], async () => {
+      if (transferTargetCategoryId) {
+        // Transfer all vocabularies to the target category
+        const affectedVocabs = await db.vocabularies.where('categoryId').equals(id).toArray();
+        for (const v of affectedVocabs) {
+          await db.vocabularies.update(v.id, {
+            categoryId: transferTargetCategoryId,
+            updatedAt: new Date().toISOString()
+          });
+        }
+      }
+      await db.categories.delete(id);
+    });
+
+    if (activeCategory === id) {
+      setActiveCategory('all');
+    }
+    await refreshData();
+  };
+
   return {
     vocabularies: filteredVocabularies,
     allVocabularies: vocabularies,
@@ -248,6 +296,9 @@ export function useMufradati() {
     undoLastImport,
     updateVocabulary,
     deleteVocabulary,
+    addCategory,
+    updateCategory,
+    deleteCategory,
     toggleBookmark,
     refreshData,
     seedSampleEntryIfEmpty

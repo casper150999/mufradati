@@ -45,3 +45,4 @@ File build `dist/index.html` sudah menangani seluruh routing dan state klien. Ji
 - Buka URL yang diberikan oleh Cloudflare (misalnya: `https://mufradati.pages.dev`).
 - Periksa logo install PWA di address bar browser untuk memasang aplikasi ke desktop atau smartphone.
 - Uji fitur Smart Paste, simpan kosakata, lalu matikan koneksi internet (Airplane mode) untuk membuktikan mode offline penuh.
+

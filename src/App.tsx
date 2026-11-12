@@ -5,23 +5,25 @@ import {
   Plus, 
   Sparkles, 
   Bookmark, 
-  Settings, 
   Moon, 
   Sun, 
   Folder, 
   Download,
   Trash2,
-  RotateCcw
+  RotateCcw,
+  Printer
 } from 'lucide-react';
 import { useMufradati } from './hooks/useMufradati.ts';
 import { VocabularyFormModal } from './features/vocabulary/VocabularyFormModal.tsx';
 import { SmartPasteModal } from './features/smart-paste/SmartPasteModal.tsx';
+import { BackupModal } from './features/backup/BackupModal.tsx';
 
 export function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [arabicFontSize, setArabicFontSize] = useState(36);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isSmartPasteOpen, setIsSmartPasteOpen] = useState(false);
+  const [isBackupOpen, setIsBackupOpen] = useState(false);
   const [undoNotice, setUndoNotice] = useState<string | null>(null);
 
   const {
@@ -174,11 +176,19 @@ export function App() {
           <div className="p-4 border-t border-gray-200/60 dark:border-white/10 flex items-center justify-between text-xs text-gray-500">
             <span>Mufradati v1.0 (IndexedDB)</span>
             <div className="flex items-center gap-2">
-              <button title="Backup & Restore" className="p-1.5 hover:bg-gray-200/60 dark:hover:bg-white/10 rounded-lg">
+              <button 
+                onClick={() => setIsBackupOpen(true)}
+                title="Cadangan, Pulihkan & Cetak PDF" 
+                className="p-1.5 hover:bg-gray-200/60 dark:hover:bg-white/10 rounded-lg text-gray-600 dark:text-gray-300 transition-colors"
+              >
                 <Download className="w-3.5 h-3.5" />
               </button>
-              <button title="Pengaturan" className="p-1.5 hover:bg-gray-200/60 dark:hover:bg-white/10 rounded-lg">
-                <Settings className="w-3.5 h-3.5" />
+              <button 
+                onClick={() => window.print()}
+                title="Cetak Langsung PDF" 
+                className="p-1.5 hover:bg-gray-200/60 dark:hover:bg-white/10 rounded-lg text-gray-600 dark:text-gray-300 transition-colors"
+              >
+                <Printer className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -441,6 +451,20 @@ export function App() {
           <span>{undoNotice}</span>
         </div>
       )}
+
+      {/* MODAL: Backup, Restore & Ekspor PDF */}
+      <BackupModal
+        isOpen={isBackupOpen}
+        onClose={() => setIsBackupOpen(false)}
+        onDataRestored={async () => {
+          await useMufradati().refreshData();
+        }}
+        onPrintPdf={() => {
+          setTimeout(() => {
+            window.print();
+          }, 300);
+        }}
+      />
     </div>
   );
 }

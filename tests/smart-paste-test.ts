@@ -46,3 +46,4 @@ if (!ex1.arabic.includes('حَرَّمَ الإِسْلَامُ أَنْ يَغ�
 }
 
 console.log('PASS: All parser tests succeeded with 100% Arabic diacritics preservation!');
+

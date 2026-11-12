@@ -10,35 +10,34 @@
 ---
 
 ## 2. Status Saat Ini
-- **Fase Aktif:** Selesai **PHASE 4 (Smart Paste Engine & Batch Parser)**. Siap masuk **PHASE 5 (Backup, Restore & PDF Export)**.
-- **Progres Keseluruhan:** ~65%
+- **Fase Aktif:** Selesai **PHASE 5 (Backup, Restore & PDF Export)**. Siap masuk **PHASE 6 (PWA & Offline Readiness)**.
+- **Progres Keseluruhan:** ~80%
 - **Status Build:** `npm run build` sukses 100% (0 error TypeScript, strict mode).
-- **Status Test Parser:** PASS (`node --experimental-strip-types tests/smart-paste-test.ts` berhasil mem-parsing entri 311-312 dengan 100% harakat utuh).
-- **Commit Terakhir:** `feat: implement smart paste parser, interactive preview, and batch undo (Phase 4)`
+- **Status Test:** PASS (Parser test & Backup validation test sukses 100%).
+- **Commit Terakhir:** `feat: implement json backup, restore with schema validation, and vector pdf print export (Phase 5)`
 
 ---
 
 ## 3. Komponen yang Sudah Terpasang & Berfungsi
-1. **Smart Paste Rule-Based Parser (`smartPasteParser.ts`):** 
-   - Tokenizer baris & regex Unicode offline (bebas API AI berbayar).
-   - Preservasi harakat 100% mutlak.
-   - Deteksi nomor Arab/Latin (`٣١١.`, `311.`), kata Arab, bentuk fi'il/jamak/mashdar, arti Indonesia, serta pasangan kalimat Jumlah Mufidah (`①, ②, ③`).
-2. **Interactive Preview Workbench (`SmartPasteModal.tsx`):**
-   - Pengguna dapat memeriksa dan mengoreksi kata Arab, arti, atau contoh kalimat sebelum commit ke IndexedDB.
-   - Pemilihan kategori tujuan impor.
-3. **Batch Import & Undo Last Import:**
-   - Menyimpan batch dengan `importBatchId` unik.
-   - Tombol *Undo Last Import* pada sidebar yang dapat membatalkan batch terakhir tanpa mengganggu kosakata lain.
+1. **JSON Backup & Restore Engine (`backupService.ts`):**
+   - Ekspor seluruh database IndexedDB (kosakata, kategori, sequence nomor atomik) menjadi file `.json`.
+   - Validasi skema protektif sebelum pemulihan data (`validateBackupJson`).
+   - Opsi pemulihan fleksibel: **Timpa Seluruh Data** atau **Gabungkan Data**.
+2. **Ekspor & Cetak PDF Vektor Presisi:**
+   - Aturan stylesheet `@media print` terkonfigurasi dengan font lokal Amiri, RTL, dan `break-inside: avoid` untuk mencegah pemotongan kartu entri di batas halaman.
+3. **Modul Smart Paste & Preview:**
+   - Parser offline rule-based di `smartPasteParser.ts` dengan preservasi harakat 100%.
+   - Live interactive adjustment & Undo Last Import per batch.
 4. **Database & UI:**
-   - IndexedDB persisten, penomoran sequence atomik stabil, pencarian dwibahasa, font scaler, dan continuous scroll view.
+   - IndexedDB persisten, penomoran stabil, pencarian dwibahasa, dark/light mode, font scaler.
 
 ---
 
 ## 4. Langkah Teknis Selanjutnya (Immediate Next Actions)
-1. **PHASE 5 (Backup, Restore & PDF Export):**
-   - Buat fitur Ekspor & Impor JSON (seluruh tabel Dexie: kosakata, kategori, sequences).
-   - Buat validasi skema file JSON saat restore dengan dialog konfirmasi.
-   - Buat template cetak/ekspor PDF lokal dengan paged CSS styling yang merender font Amiri dan orientasi RTL sempurna tanpa memotong kalimat.
+1. **PHASE 6 (PWA & Offline Readiness):**
+   - Buat file `public/manifest.json` (Nama: Mufradati, background `#F7F8F5`, theme `#244D3B`, ikon PWA).
+   - Buat service worker di `public/sw.js` untuk cache statis aset & font lokal.
+   - Daftarkan service worker di `main.tsx`.
 
 ---
 

@@ -194,3 +194,4 @@ export function parseSmartPasteText(rawText: string): ParsedVocabularyItem[] {
   const blocks = splitIntoBlocks(rawText);
   return blocks.map((b, idx) => parseBlock(b, idx));
 }
+

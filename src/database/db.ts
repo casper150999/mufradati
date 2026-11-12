@@ -88,3 +88,4 @@ export async function seedInitialCategories(): Promise<void> {
     await db.categories.bulkAdd(defaultCategories);
   }
 }
+

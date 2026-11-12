@@ -98,6 +98,77 @@ export function useMufradati() {
     await refreshData();
   };
 
+  // Add multiple vocabularies in an atomic batch
+  const addBatchVocabularies = async (
+    items: Array<{
+      arabic: string;
+      meaning: string;
+      categoryId: string;
+      forms?: VocabularyForm[];
+      examples: Example[];
+      sourceRawText?: string;
+    }>,
+    rawBatchText: string
+  ): Promise<{ batchId: string; count: number }> => {
+    const batchId = crypto.randomUUID();
+    const count = items.length;
+    if (count === 0) return { batchId, count: 0 };
+
+    const assignedNumbers = await getNextVocabularyNumbers(count);
+    const vocabEntities: Vocabulary[] = items.map((item, idx) => {
+      const searchIndex = buildSearchIndex(item.arabic, item.meaning, item.forms, item.examples);
+      return {
+        id: crypto.randomUUID(),
+        number: assignedNumbers[idx],
+        arabic: item.arabic,
+        meaning: item.meaning,
+        categoryId: item.categoryId,
+        forms: item.forms || [],
+        examples: item.examples || [],
+        bookmarked: false,
+        sourceRawText: item.sourceRawText,
+        importBatchId: batchId,
+        searchIndex,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+    });
+
+    await db.transaction('rw', [db.vocabularies, db.import_batches], async () => {
+      await db.vocabularies.bulkAdd(vocabEntities);
+      await db.import_batches.add({
+        id: batchId,
+        importedAt: new Date().toISOString(),
+        vocabularyIds: vocabEntities.map(v => v.id),
+        sourceRawText: rawBatchText,
+        status: 'completed'
+      });
+    });
+
+    await refreshData();
+    return { batchId, count };
+  };
+
+  // Undo last import batch
+  const undoLastImport = async (): Promise<boolean> => {
+    const lastBatch = await db.import_batches
+      .where('status')
+      .equals('completed')
+      .reverse()
+      .sortBy('importedAt');
+
+    if (!lastBatch || lastBatch.length === 0) return false;
+    const target = lastBatch[0];
+
+    await db.transaction('rw', [db.vocabularies, db.import_batches], async () => {
+      await db.vocabularies.bulkDelete(target.vocabularyIds);
+      await db.import_batches.update(target.id, { status: 'undone' });
+    });
+
+    await refreshData();
+    return true;
+  };
+
   // Filtered list based on active category, search query, and bookmarks
   const filteredVocabularies = vocabularies.filter((v) => {
     // 1. Filter Category
@@ -173,6 +244,8 @@ export function useMufradati() {
     bookmarkedOnly,
     setBookmarkedOnly,
     addVocabulary,
+    addBatchVocabularies,
+    undoLastImport,
     updateVocabulary,
     deleteVocabulary,
     toggleBookmark,
@@ -180,3 +253,4 @@ export function useMufradati() {
     seedSampleEntryIfEmpty
   };
 }
+

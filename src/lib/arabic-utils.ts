@@ -61,3 +61,4 @@ export function buildSearchIndex(
 
   return parts.join(' ');
 }
+

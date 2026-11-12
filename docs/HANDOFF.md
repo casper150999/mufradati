@@ -10,29 +10,35 @@
 ---
 
 ## 2. Status Saat Ini
-- **Fase Aktif:** Selesai **PHASE 3 (Database Engine & Core Vocabulary Management)**. Siap masuk **PHASE 4 (Smart Paste Engine & Batch Parser)**.
-- **Progres Keseluruhan:** ~45%
+- **Fase Aktif:** Selesai **PHASE 4 (Smart Paste Engine & Batch Parser)**. Siap masuk **PHASE 5 (Backup, Restore & PDF Export)**.
+- **Progres Keseluruhan:** ~65%
 - **Status Build:** `npm run build` sukses 100% (0 error TypeScript, strict mode).
-- **Commit Terakhir:** `feat: implement indexeddb storage, atomic sequence numbering, and vocabulary crud (Phase 3)`
+- **Status Test Parser:** PASS (`node --experimental-strip-types tests/smart-paste-test.ts` berhasil mem-parsing entri 311-312 dengan 100% harakat utuh).
+- **Commit Terakhir:** `feat: implement smart paste parser, interactive preview, and batch undo (Phase 4)`
 
 ---
 
 ## 3. Komponen yang Sudah Terpasang & Berfungsi
-1. **IndexedDB Engine via Dexie.js:** Database `MufradatiDB` dengan tabel `vocabularies`, `categories`, `import_batches`, `sequences`, dan `user_settings`.
-2. **Atomic Sequence Numbering:** Generator angka urut stabil di `db.ts` (`getNextVocabularyNumbers`) yang menjamin nomor kosakata naik secara berurutan dan tidak pernah di-reuse.
-3. **Arabic Search Index:** Service `buildSearchIndex` & `stripArabicDiacritics` di `arabic-utils.ts` yang membuat pencarian cepat baik mengetik teks dengan harakat maupun teks gundul (tanpa mengubah teks asli di database).
-4. **Vocabulary CRUD & Filter:** Modal tambah entri manual (`VocabularyFormModal.tsx`), filter bab/kategori dinamis, bookmarking toggle, dan hapus entri.
-5. **UI Digital Book:** Menampilkan nomor urut global `001`, bentuk kata tambahan, dan Jumlah Mufidah `①, ②, ③` langsung dari data IndexedDB persisten.
+1. **Smart Paste Rule-Based Parser (`smartPasteParser.ts`):** 
+   - Tokenizer baris & regex Unicode offline (bebas API AI berbayar).
+   - Preservasi harakat 100% mutlak.
+   - Deteksi nomor Arab/Latin (`٣١١.`, `311.`), kata Arab, bentuk fi'il/jamak/mashdar, arti Indonesia, serta pasangan kalimat Jumlah Mufidah (`①, ②, ③`).
+2. **Interactive Preview Workbench (`SmartPasteModal.tsx`):**
+   - Pengguna dapat memeriksa dan mengoreksi kata Arab, arti, atau contoh kalimat sebelum commit ke IndexedDB.
+   - Pemilihan kategori tujuan impor.
+3. **Batch Import & Undo Last Import:**
+   - Menyimpan batch dengan `importBatchId` unik.
+   - Tombol *Undo Last Import* pada sidebar yang dapat membatalkan batch terakhir tanpa mengganggu kosakata lain.
+4. **Database & UI:**
+   - IndexedDB persisten, penomoran sequence atomik stabil, pencarian dwibahasa, font scaler, dan continuous scroll view.
 
 ---
 
 ## 4. Langkah Teknis Selanjutnya (Immediate Next Actions)
-1. **PHASE 4 (Smart Paste Engine):**
-   - Buat file parser TypeScript `src/features/smart-paste/smartPasteParser.ts`.
-   - Bangun rule-based tokenizer: deteksi nomor Latin/Arab, pemisah entri, kata Arab, makna, bentuk kata, dan pasangan Jumlah Mufidah.
-   - Buat UI `SmartPasteModal.tsx` dengan textarea input dan Live Interactive Preview (memungkinkan koreksi baris sebelum commit).
-   - Buat handler batch import di database dengan penomoran atomik berurutan serta penyimpanan `importBatchId`.
-   - Buat fitur "Undo Last Import" per batch ID.
+1. **PHASE 5 (Backup, Restore & PDF Export):**
+   - Buat fitur Ekspor & Impor JSON (seluruh tabel Dexie: kosakata, kategori, sequences).
+   - Buat validasi skema file JSON saat restore dengan dialog konfirmasi.
+   - Buat template cetak/ekspor PDF lokal dengan paged CSS styling yang merender font Amiri dan orientasi RTL sempurna tanpa memotong kalimat.
 
 ---
 

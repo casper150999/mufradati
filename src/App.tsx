@@ -10,15 +10,19 @@ import {
   Sun, 
   Folder, 
   Download,
-  Trash2
+  Trash2,
+  RotateCcw
 } from 'lucide-react';
 import { useMufradati } from './hooks/useMufradati.ts';
 import { VocabularyFormModal } from './features/vocabulary/VocabularyFormModal.tsx';
+import { SmartPasteModal } from './features/smart-paste/SmartPasteModal.tsx';
 
 export function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [arabicFontSize, setArabicFontSize] = useState(36);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isSmartPasteOpen, setIsSmartPasteOpen] = useState(false);
+  const [undoNotice, setUndoNotice] = useState<string | null>(null);
 
   const {
     vocabularies,
@@ -32,6 +36,8 @@ export function App() {
     bookmarkedOnly,
     setBookmarkedOnly,
     addVocabulary,
+    addBatchVocabularies,
+    undoLastImport,
     deleteVocabulary,
     toggleBookmark,
     seedSampleEntryIfEmpty
@@ -75,7 +81,10 @@ export function App() {
 
           {/* Quick Actions */}
           <div className="p-4 space-y-2 border-b border-gray-200/60 dark:border-white/10">
-            <button className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-[#244D3B] hover:bg-[#1b3b2d] text-white rounded-xl font-medium text-sm transition-all shadow-sm">
+            <button 
+              onClick={() => setIsSmartPasteOpen(true)}
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-[#244D3B] hover:bg-[#1b3b2d] text-white rounded-xl font-medium text-sm transition-all shadow-sm"
+            >
               <Sparkles className="w-4 h-4 text-[#D5B875]" />
               <span>Smart Paste AI</span>
             </button>
@@ -85,6 +94,22 @@ export function App() {
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Tambah Kosakata Manual</span>
+            </button>
+            <button 
+              onClick={async () => {
+                const undone = await undoLastImport();
+                if (undone) {
+                  setUndoNotice('Batch impor terakhir berhasil dibatalkan (Undo).');
+                  setTimeout(() => setUndoNotice(null), 4000);
+                } else {
+                  setUndoNotice('Tidak ada riwayat batch impor aktif untuk dibatalkan.');
+                  setTimeout(() => setUndoNotice(null), 4000);
+                }
+              }}
+              className="w-full flex items-center justify-center gap-2 py-1.5 px-3 hover:bg-gray-200/50 dark:hover:bg-white/5 rounded-lg text-[11px] text-gray-500 transition-colors"
+            >
+              <RotateCcw className="w-3 h-3" />
+              <span>Undo Last Import</span>
             </button>
           </div>
 
@@ -386,6 +411,36 @@ export function App() {
           await addVocabulary(data);
         }}
       />
+
+      {/* MODAL: Smart Paste AI */}
+      <SmartPasteModal
+        isOpen={isSmartPasteOpen}
+        onClose={() => setIsSmartPasteOpen(false)}
+        categories={categories}
+        onCommitBatch={async (items, categoryId, rawText) => {
+          const payload = items.map(item => ({
+            arabic: item.arabic,
+            meaning: item.meaning,
+            categoryId,
+            forms: item.forms,
+            examples: item.examples.map(ex => ({
+              id: ex.id,
+              arabic: ex.arabic,
+              translation: ex.translation
+            })),
+            sourceRawText: item.rawBlock
+          }));
+          await addBatchVocabularies(payload, rawText);
+        }}
+      />
+
+      {/* Undo Notification Toast */}
+      {undoNotice && (
+        <div className="fixed bottom-6 right-6 z-50 bg-[#244D3B] text-white px-4 py-3 rounded-xl shadow-xl text-xs font-medium flex items-center gap-2 animate-bounce">
+          <RotateCcw className="w-4 h-4 text-[#D5B875]" />
+          <span>{undoNotice}</span>
+        </div>
+      )}
     </div>
   );
 }

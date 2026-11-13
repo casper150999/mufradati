@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   X, 
   Sparkles, 
@@ -37,10 +37,19 @@ export function SmartPasteModal({
   const [selectedCategoryId, setSelectedCategoryId] = useState(categories[0]?.id || 'cat_umum');
   const [parsedItems, setParsedItems] = useState<ParsedVocabularyItem[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [commitError, setCommitError] = useState<string | null>(null);
+
+  // Sync selectedCategoryId if categories change
+  useEffect(() => {
+    if (categories.length > 0 && (!selectedCategoryId || !categories.some(c => c.id === selectedCategoryId))) {
+      setSelectedCategoryId(categories[0].id);
+    }
+  }, [categories, selectedCategoryId]);
 
   if (!isOpen) return null;
 
   const handleParse = () => {
+    setCommitError(null);
     if (!rawText.trim()) return;
     const results = parseSmartPasteText(rawText);
     setParsedItems(results);
@@ -75,15 +84,18 @@ export function SmartPasteModal({
   const handleCommit = async () => {
     if (parsedItems.length === 0) return;
     setIsSubmitting(true);
+    setCommitError(null);
     try {
-      await onCommitBatch(parsedItems, selectedCategoryId, rawText);
+      const targetCatId = selectedCategoryId || categories[0]?.id || 'cat_umum';
+      await onCommitBatch(parsedItems, targetCatId, rawText);
       // Reset state and close
       setStep('input');
       setRawText('');
       setParsedItems([]);
       onClose();
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to commit batch:', err);
+      setCommitError(err.message || 'Terjadi kesalahan saat menyimpan ke database.');
     } finally {
       setIsSubmitting(false);
     }
@@ -229,6 +241,12 @@ Barang siapa bersungguh-sungguh dia akan berhasil, dan siapa yang berjuang dia a
 
             {/* Scrollable Preview List */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              {commitError && (
+                <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{commitError}</span>
+                </div>
+              )}
               {parsedItems.map((item, idx) => (
                 <div
                   key={item.tempId}

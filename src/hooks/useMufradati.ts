@@ -114,7 +114,9 @@ export function useMufradati() {
     const count = items.length;
     if (count === 0) return { batchId, count: 0 };
 
+    // Get sequence numbers first before opening the batch commit transaction
     const assignedNumbers = await getNextVocabularyNumbers(count);
+
     const vocabEntities: Vocabulary[] = items.map((item, idx) => {
       const searchIndex = buildSearchIndex(item.arabic, item.meaning, item.forms, item.examples);
       return {

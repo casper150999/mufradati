@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bank Kosakata Arab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   DESIGN TOKENS & TEMA WARNA (LIGHT & DARK MODE)
+   ========================================================================== */
+:root{
+  --bg:#f3f6fb;
+  --surface:#ffffff;
+  --ink:#16202e;
+  --mute:#5b6c80;
+  --blue:#134b80;
+  --blue-hover:#0e3a64;
+  --head:linear-gradient(135deg,#d8ecff 0%,#eaf4ff 100%);
+  --chip:#e6f0fc;
+  --plural-bg:rgba(19,75,128,.1);
+  --line:#d2e2f3;
+  --card:#ffffff;
+  --bar-bg:rgba(243,246,251,.88);
+  --shadow:0 4px 18px rgba(19,75,128,.07);
+  --err:#c62828;
+  --warn:#9a5b00;
+  --ok:#166534;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme=light]){
+    --bg:#0c131c;
+    --surface:#131e2b;
+    --ink:#e6eef8;
+    --mute:#95a8be;
+    --blue:#82c0fa;
+    --blue-hover:#a3d1fc;
+    --head:linear-gradient(135deg,#17324e 0%,#1d3f61 100%);
+    --chip:#18293c;
+    --plural-bg:rgba(130,192,250,.14);
+    --line:#253d56;
+    --card:#131e2b;
+    --bar-bg:rgba(12,19,28,.88);
+    --shadow:0 6px 22px rgba(0,0,0,.32);
+    --err:#ff8a80;
+    --warn:#f5c451;
+    --ok:#6ee7b7;
+    color-scheme:dark;
+  }
+}
+:root[data-theme=dark]{
+  --bg:#0c131c;
+  --surface:#131e2b;
+  --ink:#e6eef8;
+  --mute:#95a8be;
+  --blue:#82c0fa;
+  --blue-hover:#a3d1fc;
+  --head:linear-gradient(135deg,#17324e 0%,#1d3f61 100%);
+  --chip:#18293c;
+  --plural-bg:rgba(130,192,250,.14);
+  --line:#253d56;
+  --card:#131e2b;
+  --bar-bg:rgba(12,19,28,.88);
+  --shadow:0 6px 22px rgba(0,0,0,.32);
+  --err:#ff8a80;
+  --warn:#f5c451;
+  --ok:#6ee7b7;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.5 "Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+input,textarea,button,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* ==========================================================================
+   BILAH ATAS STICKY (GLASSMORPHIC BAR)
+   ========================================================================== */
+.bar{
+  position:sticky;
+  top:env(safe-area-inset-top,0px);
+  z-index:10;
+  background:var(--bar-bg);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  padding:12px 14px 10px;
+}
+.bar-in{max-width:560px;margin:auto;display:flex;flex-direction:column;gap:10px}
+.top{display:flex;align-items:center;gap:7px}
+.brand{flex:1;min-width:0;display:flex;align-items:center;gap:9px}
+.brand-badge{
+  width:34px;height:34px;border-radius:10px;
+  background:var(--blue);color:var(--bg);
+  display:grid;place-items:center;
+  font:700 19px/1 Amiri,serif;
+  flex:none;
+}
+.bar h1{
+  margin:0;font-size:19px;font-weight:700;letter-spacing:-.015em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.ico{
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--line);background:var(--surface);color:var(--blue);
+  font-size:17px;line-height:1;cursor:pointer;
+  display:inline-grid;place-items:center;flex:none;
+  transition:background .15s,border-color .15s,transform .1s;
+}
+.ico:hover{border-color:var(--blue);background:var(--chip)}
+.ico:active{transform:scale(.95)}
+.ico.active{background:var(--blue);color:var(--bg);border-color:var(--blue)}
+.pill{
+  border-radius:99px;padding:8px 14px;font-size:13.5px;white-space:nowrap;
+}
+.btn{
+  border:1px solid var(--blue);background:var(--blue);color:var(--bg);
+  border-radius:10px;padding:9px 14px;cursor:pointer;font-weight:600;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  transition:background .15s,opacity .15s,transform .1s;
+}
+.btn:hover:not(:disabled){background:var(--blue-hover);border-color:var(--blue-hover)}
+.btn:active:not(:disabled){transform:scale(.98)}
+.btn:disabled{opacity:.48;cursor:not-allowed}
+.btn.ghost{background:var(--surface);color:var(--blue);border-color:var(--line)}
+.btn.ghost:hover:not(:disabled){border-color:var(--blue);background:var(--chip)}
+.btn.sm{padding:5px 11px;font-size:12.5px;border-radius:8px}
+.btn.danger{border-color:var(--err);background:transparent;color:var(--err);margin-right:auto}
+.btn.danger:hover:not(:disabled){background:var(--err);color:#fff}
+
+/* ==========================================================================
+   BARIS PENCARIAN & URUTAN
+   ========================================================================== */
+.srch{display:flex;gap:8px;align-items:center}
+.q-wrap{position:relative;flex:1;display:flex;align-items:center}
+.q{
+  width:100%;padding:10px 36px 10px 15px;
+  border:1px solid var(--line);border-radius:99px;
+  background:var(--surface);font-size:14px;
+  transition:border-color .15s,box-shadow .15s;
+}
+.q:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--chip)}
+.q-clear{
+  position:absolute;right:8px;width:24px;height:24px;border:0;border-radius:50%;
+  background:var(--chip);color:var(--blue);cursor:pointer;
+  display:grid;place-items:center;font-size:14px;line-height:1;
+}
+.q-clear[hidden]{display:none}
+.sel{
+  padding:9px 11px;border:1px solid var(--line);border-radius:99px;
+  background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;
+  cursor:pointer;max-width:128px;
+}
+
+/* ==========================================================================
+   AREA UTAMA & BANNER HAFALAN
+   ========================================================================== */
+main{max-width:560px;margin:0 auto;padding:12px 14px 48px}
+.meta-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin:2px 2px 12px;font-size:13px;color:var(--mute);
+}
+.quiz-banner{
+  background:var(--chip);border:1px solid var(--line);color:var(--blue);
+  border-radius:12px;padding:8px 12px;margin-bottom:12px;font-size:13px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.quiz-banner[hidden]{display:none}
+
+/* ==========================================================================
+   KARTU KOSAKATA (.card)
+   ========================================================================== */
+.card{
+  border:1.5px solid var(--blue);
+  border-radius:18px;
+  background:var(--card);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  margin-bottom:16px;
+  transition:transform .15s;
+}
+.card header{
+  display:grid;
+  grid-template-columns:1fr 1px 1.65fr auto;
+  align-items:center;
+  gap:12px;
+  background:var(--head);
+  padding:13px 13px 13px 16px;
+  border-bottom:1px solid var(--line);
+}
+.mean{
+  font-weight:700;font-size:14px;line-height:1.4;
+  color:var(--blue);overflow-wrap:anywhere;
+}
+.sep{align-self:stretch;background:var(--blue);opacity:.35}
+.ar-box{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.ar{font-family:Amiri,"Noto Naskh Arabic","Traditional Arabic",serif;direction:rtl;text-align:center}
+.head-ar{font-size:28px;line-height:1.75;font-weight:700;color:var(--ink)}
+.plural-tag{
+  display:inline-block;direction:rtl;
+  font:700 17px/1.5 Amiri,"Noto Naskh Arabic",serif;
+  background:var(--plural-bg);color:var(--blue);
+  padding:1px 10px;border-radius:99px;
+}
+.no{
+  background:var(--blue);color:var(--bg);
+  border-radius:10px;min-width:42px;padding:3px 9px;
+  text-align:center;font:700 20px/1.75 Amiri,serif;
+}
+
+.body{padding:12px 16px 14px}
+.body-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.chip{
+  display:inline-block;background:var(--chip);color:var(--blue);
+  font-weight:700;font-size:12.5px;padding:5px 14px;border-radius:99px;
+}
+.spk{
+  border:1px solid var(--line);background:transparent;color:var(--blue);
+  border-radius:99px;padding:3px 9px;font-size:12px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:4px;flex:none;
+}
+.spk:hover{background:var(--chip);border-color:var(--blue)}
+.spk.mini{padding:2px 7px;font-size:11.5px;border-color:transparent;opacity:.8}
+.spk.mini:hover{opacity:1;border-color:var(--line)}
+
+.ex{padding:9px 0 11px;border-bottom:1px solid var(--line)}
+.ex:last-child{border-bottom:0;padding-bottom:2px}
+.ex-ar{display:flex;gap:9px;align-items:flex-start;direction:rtl}
+.ex-ar .ar{flex:1;text-align:right;font-size:21.5px;line-height:2.1;color:var(--ink)}
+.circ{
+  flex:none;width:26px;height:26px;margin-top:8px;
+  border:1.5px solid var(--blue);border-radius:50%;color:var(--blue);
+  display:grid;place-items:center;font:700 14px/1 Amiri,serif;padding-top:2px;
+}
+.tr{
+  direction:ltr;text-align:left;font-size:13.5px;line-height:1.5;
+  color:var(--mute);margin-top:3px;padding-left:2px;
+}
+
+/* Mode Hafalan (Blur Terjemahan & Arti) */
+body.quiz-mode .maskable{
+  filter:blur(5.5px);
+  user-select:none;
+  cursor:pointer;
+  background:var(--chip);
+  border-radius:6px;
+  transition:filter .18s,background .18s;
+}
+body.quiz-mode .maskable.revealed{
+  filter:none;
+  user-select:auto;
+  background:transparent;
+}
+
+/* Footer Kartu */
+.card-foot{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:8px 14px;background:var(--bg);border-top:1px solid var(--line);
+}
+.foot-grp{display:flex;align-items:center;gap:6px}
+
+/* Empty State */
+.empty{
+  text-align:center;color:var(--mute);
+  background:var(--surface);border:1.5px dashed var(--line);
+  border-radius:18px;padding:36px 18px;
+}
+.empty-icon{font:700 34px/1.2 Amiri,serif;color:var(--blue);margin-bottom:8px}
+.empty p{margin:0 0 16px;font-size:14px}
+.empty-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+
+/* Paginasi */
+.more-wrap{text-align:center;margin-top:8px}
+
+/* ==========================================================================
+   MODAL DIALOGS
+   ========================================================================== */
+dialog{
+  width:min(560px,calc(100% - 20px));max-height:calc(100% - 24px);
+  border:1.5px solid var(--blue);border-radius:16px;
+  background:var(--surface);color:var(--ink);
+  padding:18px;overflow:auto;box-shadow:0 16px 40px rgba(0,0,0,.28);
+}
+dialog::backdrop{background:rgba(10,18,28,.55);backdrop-filter:blur(2px)}
+dialog h2{margin:0 0 12px;font-size:17.5px;color:var(--blue)}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--mute);margin:9px 0 4px}
+.f{
+  width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;
+  background:var(--bg);color:var(--ink);
+}
+.f:focus{outline:none;border-color:var(--blue)}
+.f.rtl{direction:rtl;font-family:Amiri,serif;font-size:21px;line-height:1.8}
+.row{display:flex;gap:8px}.row>*{flex:1}.row>.n{flex:0 0 105px}
+fieldset{border:1px solid var(--line);border-radius:11px;margin:11px 0 0;padding:4px 11px 11px}
+legend{color:var(--blue);font-size:13px;font-weight:700;padding:0 4px}
+.foot{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.msg{font-size:13px;margin:10px 0 0;line-height:1.45}
+.msg .e{color:var(--err)}.msg .w{color:var(--warn)}.msg .o{color:var(--ok)}
+.prev .card{margin-top:12px;margin-bottom:0}
+.rep{border:1px solid var(--line);border-radius:10px;padding:9px 11px;margin-top:9px;font-size:13px;background:var(--bg)}
+.rep b{color:var(--blue)}
+textarea.f{min-height:210px;resize:vertical;font-family:Amiri,"Plus Jakarta Sans",serif;font-size:17px;line-height:1.7}
+
+.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+@media(max-width:440px){.tool-grid{grid-template-columns:1fr}}
+.tool-box{
+  border:1px solid var(--line);border-radius:12px;padding:12px;
+  background:var(--bg);display:flex;flex-direction:column;gap:8px;justify-content:space-between;
+}
+.tool-box h3{margin:0;font-size:14px;color:var(--blue)}
+.tool-box p{margin:0;font-size:12.5px;color:var(--mute)}
+
+/* Notifikasi Toast */
+.toast{
+  position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--ink);color:var(--bg);
+  padding:9px 16px;border-radius:99px;font-size:13px;font-weight:600;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  opacity:0;pointer-events:none;z-index:50;
+  transition:opacity .2s,transform .2s;
+  max-width:calc(100% - 32px);text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- Bilah Navigasi Atas -->
+<div class="bar">
+  <div class="bar-in">
+    <div class="top">
+      <div class="brand">
+        <div class="brand-badge" aria-hidden="true">ض</div>
+        <h1>Bank Kosakata</h1>
+      </div>
+      <button class="ico" id="quizBtn" title="Mode Hafalan (sembunyikan arti)" aria-label="Mode Hafalan" aria-pressed="false">👁</button>
+      <button class="ico" id="themeBtn" title="Ganti tema terang/gelap" aria-label="Ganti tema">◐</button>
+      <button class="ico" id="dataBtn" title="Cadangan, Impor JSON & Ekspor Teks" aria-label="Pengaturan Data">⚙</button>
+      <button class="ico" id="add" title="Tambah satu mufradat" aria-label="Tambah satu mufradat">＋</button>
+      <button class="btn pill" id="imp" title="Tambah banyak mufradat sekaligus dari teks">Tambah banyak</button>
+    </div>
+    <div class="srch">
+      <div class="q-wrap">
+        <input class="q" id="q" type="search" placeholder="Cari kata Arab, arti, contoh, atau nomor…" aria-label="Cari mufradat">
+        <button class="q-clear" id="qClear" type="button" hidden title="Hapus pencarian" aria-label="Hapus pencarian">✕</button>
+      </div>
+      <select class="sel" id="sortSel" aria-label="Urutkan mufradat">
+        <option value="asc">No. 1 → 9</option>
+        <option value="desc">No. 9 → 1</option>
+        <option value="az">Arti A → Z</option>
+      </select>
+      <button class="ico" id="pdf" title="Ekspor PDF (A6)" aria-label="Ekspor PDF">⤓</button>
+    </div>
+  </div>
+</div>
+
+<!-- Area Daftar Kartu -->
+<main>
+  <div class="quiz-banner" id="quizBanner" hidden>
+    <span><b>Mode Hafalan aktif:</b> Ketuk arti atau terjemahan yang buram untuk mengintip.</span>
+    <button class="btn ghost sm" id="revealAllBtn" type="button">Buka Semua</button>
+  </div>
+  <div class="meta-bar">
+    <span id="count"></span>
+    <span id="pluralCount"></span>
+  </div>
+  <div id="list"></div>
+  <div class="more-wrap" id="moreWrap" hidden>
+    <button class="btn ghost" id="moreBtn" type="button">Tampilkan lebih banyak</button>
+  </div>
+</main>
+
+<!-- Modal 1: Tambah / Edit Satuan -->
+<dialog id="dlg">
+  <h2 id="dt"></h2>
+  <div id="dform"></div>
+  <div class="msg" id="dmsg"></div>
+  <div class="foot">
+    <button class="btn danger" id="ddel" type="button" hidden>Hapus</button>
+    <button class="btn ghost" id="dcancel" type="button">Batal</button>
+    <button class="btn" id="dsave" type="button">Simpan</button>
+  </div>
+</dialog>
+
+<!-- Modal 2: Tambah Banyak Sekaligus -->
+<dialog id="idlg">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px">
+    <h2 style="margin:0">Tambah banyak sekaligus</h2>
+    <button class="btn ghost sm" id="sampleFmtBtn" type="button">Sisipkan Contoh Format</button>
+  </div>
+  <label for="itxt">Tempel mufradat di sini (nomor. kata (ج: jamak), Arti:, lalu ① ② ③). Hasilnya langsung divalidasi dan tampil sebagai kartu.</label>
+  <textarea class="f" id="itxt" spellcheck="false" placeholder="٣٤٣. مِنْبَرٌ (ج: مَنَابِرُ)&#10;Arti: Mimbar&#10;&#10;Jumlah Mufidah:&#10;① ..."></textarea>
+  <div id="irep"></div>
+  <div class="prev" id="iprev"></div>
+  <div class="foot">
+    <button class="btn ghost" id="iclose" type="button">Tutup</button>
+    <button class="btn" id="isave" type="button" disabled>Simpan</button>
+  </div>
+</dialog>
+
+<!-- Modal 3: Ekspor PDF Ukuran A6 -->
+<dialog id="pdfDlg">
+  <h2>Ekspor PDF Ukuran A6</h2>
+  <p style="margin:0 0 10px;font-size:13.5px;color:var(--mute)">Setiap halaman A6 memuat maksimal 2 kartu kosakata siap cetak dengan nomor halaman Arab Timur.</p>
+  <label for="pdfScope">Kosakata yang diekspor</label>
+  <select class="f" id="pdfScope">
+    <option value="all">Semua kosakata</option>
+    <option value="filtered">Hasil pencarian/filter saat ini</option>
+  </select>
+  <label for="pdfOrder">Urutan nomor</label>
+  <select class="f" id="pdfOrder">
+    <option value="asc">Nomor kecil ke besar (١ → ٩)</option>
+    <option value="desc">Nomor besar ke kecil (٩ → ١)</option>
+  </select>
+  <div class="msg" id="pdfMsg"></div>
+  <div class="foot">
+    <button class="btn ghost" id="pdfCancel" type="button">Batal</button>
+    <button class="btn" id="pdfGo" type="button">Buat & Unduh PDF</button>
+  </div>
+</dialog>
+
+<!-- Modal 4: Data, Cadangan & Ekspor Teks -->
+<dialog id="dataDlg">
+  <h2>Data, Cadangan & Ekspor Teks</h2>
+  <p style="margin:0 0 8px;font-size:13px;color:var(--mute)">Semua kosakata tersimpan lokal di browser perangkat ini. Gunakan cadangan berkala agar data aman.</p>
+  <div class="tool-grid">
+    <div class="tool-box">
+      <h3>Cadangkan (JSON)</h3>
+      <p>Unduh seluruh database kosakata dalam format JSON.</p>
+      <button class="btn sm" id="expJsonBtn" type="button">Unduh JSON</button>
+    </div>
+    <div class="tool-box">
+      <h3>Pulihkan (JSON)</h3>
+      <p>Impor file cadangan JSON (entri baru digabung tanpa menimpa nomor lama).</p>
+      <button class="btn ghost sm" id="impJsonBtn" type="button">Pilih File JSON</button>
+      <input type="file" id="impJsonFile" accept=".json,application/json" hidden>
+    </div>
+    <div class="tool-box">
+      <h3>Ekspor Teks (.txt)</h3>
+      <p>Unduh semua kosakata dalam format teks standar siap dibagikan.</p>
+      <button class="btn ghost sm" id="expTxtBtn" type="button">Unduh Teks (.txt)</button>
+    </div>
+    <div class="tool-box">
+      <h3>Contoh Kosakata</h3>
+      <p>Tambahkan 2 contoh mufradat awal untuk melihat tampilan kartu & PDF.</p>
+      <button class="btn ghost sm" id="loadDemoBtn" type="button">Muat Contoh</button>
+    </div>
+  </div>
+  <div class="msg" id="dataMsg"></div>
+  <div class="foot">
+    <button class="btn danger" id="clearAllBtn" type="button">Kosongkan Semua Data</button>
+    <button class="btn" id="dataClose" type="button">Selesai</button>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ==========================================================================
+   PARSER & VALIDATOR MUFRADAT (TANPA NORMALISASI UNICODE NFC/NFD)
+   ========================================================================== */
+const AR_DIGITS = '٠١٢٣٤٥٦٧٨٩';
+const IR_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
+const CIRCLED = { '①': 1, '②': 2, '③': 3 };
+const CIRCLED_BY_INDEX = ['①', '②', '③'];
+
+const RE_ARABIC_LETTER = /[\u0621-\u064A\u0671-\u06D3]/;
+const RE_HARAKAT = /[\u064B-\u0652\u0670]/;
+const RE_HEADER = /^([0-9٠-٩۰-۹]+)\s*[.\-–—:)]\s*(.+)$/;
+const RE_EDGE_JUNK = /^[\u200E\u200F\u202A-\u202E\uFEFF\s]+|[\u200E\u200F\u202A-\u202E\uFEFF\s]+$/g;
+
+const EXAMPLES_PER_ENTRY = 3;
+
+/* Konversi string angka (Latin, Arab Timur, Persia) ke integer */
+function digitsToInt(str) {
+  let out = '';
+  for (const ch of String(str)) {
+    let i = AR_DIGITS.indexOf(ch);
+    if (i < 0) i = IR_DIGITS.indexOf(ch);
+    if (i >= 0) out += i;
+    else if (/[0-9]/.test(ch)) out += ch;
+    else return NaN;
+  }
+  return out ? parseInt(out, 10) : NaN;
+}
+
+/* Format angka ke digit Arab Timur */
+function toArabicIndic(n) {
+  return String(n).replace(/[0-9]/g, (d) => AR_DIGITS[Number(d)]);
+}
+
+/* Menghitung nomor berikutnya yang tersedia */
+function nextNumber(existingNumbers = []) {
+  const nums = [...existingNumbers].map(Number).filter(Number.isInteger);
+  return nums.length ? Math.max(...nums) + 1 : 1;
+}
+
+const clean = (s) => String(s).replace(RE_EDGE_JUNK, '');
+const hasArabic = (s) => RE_ARABIC_LETTER.test(s);
+const hasHarakat = (s) => RE_HARAKAT.test(s);
+
+function stripWrappingParens(s) {
+  const t = s.trim();
+  if (/^[(（].*[)）]$/.test(t)) {
+    const inner = t.slice(1, -1);
+    if (!/[()（）]/.test(inner)) return inner.trim();
+  }
+  return t;
+}
+
+function parseHeaderBody(body) {
+  const m = body.match(/^(.*?)\s*[(（]\s*ج\s*[:：]\s*(.+?)\s*[)）]\s*$/);
+  if (m) return { word: m[1].trim(), plural: m[2].trim() };
+  return { word: body.trim(), plural: '' };
+}
+
+/* Validasi struktur dan isi satu entri kosakata */
+function validateEntry(entry, ctx = {}) {
+  const issues = [];
+  const add = (level, code, message) => issues.push({ level, code, message });
+
+  const existing = new Set((ctx.existingNumbers || []).map(Number));
+  if (ctx.ignoreNumber != null) existing.delete(Number(ctx.ignoreNumber));
+
+  if (!Number.isInteger(entry.number) || entry.number < 1) {
+    add('error', 'BAD_NUMBER', 'Nomor kosakata tidak valid (harus angka bulat lebih dari 0).');
+  } else if (existing.has(entry.number)) {
+    add(
+      'error',
+      'DUPLICATE_EXISTING',
+      `Nomor ${toArabicIndic(entry.number)} sudah ada di Bank Kosakata. Data lama tidak akan ditimpa; ubah nomor atau edit entri yang sudah ada.`
+    );
+  }
+
+  if (!entry.word || !hasArabic(entry.word)) {
+    add('error', 'BAD_WORD', 'Kosakata Arab kosong atau tidak mengandung huruf Arab.');
+  } else if (!hasHarakat(entry.word)) {
+    add('warning', 'WORD_NO_HARAKAT', 'Kosakata Arab tidak memiliki harakat.');
+  }
+
+  if (entry.plural && !hasArabic(entry.plural)) {
+    add('error', 'BAD_PLURAL', 'Bentuk jamak (ج:) tidak mengandung huruf Arab.');
+  }
+
+  if (!entry.meaning || !entry.meaning.trim()) {
+    add('error', 'MISSING_MEANING', 'Arti bahasa Indonesia kosong atau tidak ditemukan.');
+  } else if (hasArabic(entry.meaning)) {
+    add('warning', 'MEANING_HAS_ARABIC', 'Arti mengandung huruf Arab; pastikan ini disengaja.');
+  }
+
+  const examples = entry.examples || [];
+  if (examples.length !== EXAMPLES_PER_ENTRY) {
+    add('error', 'EXAMPLE_COUNT', `Jumlah mufidah harus ${EXAMPLES_PER_ENTRY}, ditemukan ${examples.length}.`);
+  }
+  examples.forEach((ex, i) => {
+    const n = i + 1;
+    if (ex.marker != null && ex.marker !== n) {
+      add('error', 'MARKER_ORDER', `Contoh ke-${n} memakai nomor ${CIRCLED_BY_INDEX[ex.marker - 1] || ex.marker}; urutan harus ① ② ③.`);
+    }
+    if (!ex.arabic || !hasArabic(ex.arabic)) {
+      add('error', 'EXAMPLE_BAD_ARABIC', `Contoh ${n}: kalimat Arab kosong atau tidak mengandung huruf Arab.`);
+    } else if (!hasHarakat(ex.arabic)) {
+      add('warning', 'EXAMPLE_NO_HARAKAT', `Contoh ${n}: kalimat Arab tidak memiliki harakat.`);
+    }
+    if (!ex.translation || !ex.translation.trim()) {
+      add('error', 'EXAMPLE_NO_TRANSLATION', `Contoh ${n}: terjemahan Indonesia tidak ditemukan.`);
+    } else if (hasArabic(ex.translation)) {
+      add('warning', 'TRANSLATION_HAS_ARABIC', `Contoh ${n}: terjemahan mengandung huruf Arab; mungkin baris tertukar.`);
+    }
+  });
+
+  return issues;
+}
+
+/* Parser teks impor massal menjadi objek mufradat tervalidasi */
+function parseMufradat(text, options = {}) {
+  const existingNumbers = (options.existingNumbers || []).map(Number).filter(Number.isInteger);
+  const lines = String(text).split(/\r\n|\r|\n/);
+  const globalIssues = [];
+  const entries = [];
+  let cur = null;
+
+  lines.forEach((rawLine, idx) => {
+    const lineNo = idx + 1;
+    const line = clean(rawLine);
+
+    if (!line) {
+      if (cur) cur.rawLines.push(rawLine);
+      return;
+    }
+
+    if (/^[-–—_*=]{3,}$/.test(line)) return;
+
+    const h = line.match(RE_HEADER);
+    if (h && hasArabic(h[2])) {
+      const { word, plural } = parseHeaderBody(h[2]);
+      cur = {
+        number: digitsToInt(h[1]),
+        word,
+        plural,
+        meaning: '',
+        examples: [],
+        startLine: lineNo,
+        issues: [],
+        rawLines: [rawLine],
+        meaningSeen: false,
+      };
+      entries.push(cur);
+      return;
+    }
+
+    if (!cur) {
+      globalIssues.push({
+        level: 'warning',
+        code: 'ORPHAN_LINE',
+        line: lineNo,
+        message: `Baris ${lineNo} di luar entri diabaikan: "${line.length > 70 ? line.slice(0, 70) + '…' : line}"`,
+      });
+      return;
+    }
+
+    cur.rawLines.push(rawLine);
+
+    if (/^Jumlah\s+Mufidah\s*[:：]?$/i.test(line)) return;
+
+    const arti = line.match(/^Arti\s*[:：]\s*(.*)$/i);
+    if (arti && cur.examples.length === 0) {
+      if (cur.meaningSeen) {
+        cur.issues.push({ level: 'error', code: 'DUPLICATE_ARTI', line: lineNo, message: `Baris ${lineNo}: label "Arti:" muncul lebih dari sekali.` });
+      } else {
+        cur.meaning = stripWrappingParens(arti[1]);
+        cur.meaningSeen = true;
+      }
+      return;
+    }
+
+    const marker = line.match(/^([①②③])\s*(.*)$/);
+    if (marker) {
+      cur.examples.push({ marker: CIRCLED[marker[1]], arabic: marker[2].trim(), translation: '', line: lineNo });
+      return;
+    }
+
+    const last = cur.examples[cur.examples.length - 1];
+    if (last && !last.translation) {
+      last.translation = line;
+      return;
+    }
+
+    cur.issues.push({
+      level: 'error',
+      code: last ? 'EXTRA_LINE' : 'UNKNOWN_LINE',
+      line: lineNo,
+      message: last
+        ? `Baris ${lineNo}: baris tambahan setelah terjemahan contoh ${last.marker}. Satu terjemahan harus satu baris.`
+        : `Baris ${lineNo}: baris tidak dikenali ("${line}"). Gunakan "Arti: ..." lalu contoh ① ② ③.`,
+    });
+  });
+
+  const countInBatch = new Map();
+  entries.forEach((e) => {
+    if (Number.isInteger(e.number)) countInBatch.set(e.number, (countInBatch.get(e.number) || 0) + 1);
+  });
+
+  const maxExisting = existingNumbers.length ? Math.max(...existingNumbers) : null;
+
+  entries.forEach((e, i) => {
+    e.issues.push(...validateEntry(e, { existingNumbers }));
+
+    if (countInBatch.get(e.number) > 1) {
+      e.issues.push({
+        level: 'error',
+        code: 'DUPLICATE_IN_BATCH',
+        message: `Nomor ${toArabicIndic(e.number)} muncul ${countInBatch.get(e.number)} kali dalam teks yang diimpor.`,
+      });
+    }
+
+    const expected = i === 0 ? (maxExisting != null ? maxExisting + 1 : null) : entries[i - 1].number + 1;
+    if (expected != null && Number.isInteger(e.number) && e.number !== expected) {
+      e.issues.push({
+        level: 'warning',
+        code: 'NUMBER_GAP',
+        message: `Nomor ${toArabicIndic(e.number)} tidak berurutan; yang diharapkan ${toArabicIndic(expected)}.`,
+      });
+    }
+
+    e.numberDisplay = Number.isInteger(e.number) ? toArabicIndic(e.number) : '';
+    e.raw = e.rawLines.join('\n').replace(/\s+$/, '');
+    e.valid = !e.issues.some((x) => x.level === 'error');
+    e.examples = e.examples.map(({ arabic, translation, marker, line }) => ({ arabic, translation, marker, line }));
+    delete e.rawLines;
+    delete e.meaningSeen;
+  });
+
+  const valid = entries.filter((e) => e.valid).length;
+  const warnings = entries.reduce((n, e) => n + e.issues.filter((x) => x.level === 'warning').length, 0);
+
+  return {
+    entries,
+    globalIssues,
+    summary: { total: entries.length, valid, invalid: entries.length - valid, warnings },
+    nextNumber: nextNumber([...existingNumbers, ...entries.filter((e) => Number.isInteger(e.number)).map((e) => e.number)]),
+  };
+}
+
+/* Serialisasi objek mufradat kembali ke format teks standar */
+function toText(entry) {
+  const head = `${toArabicIndic(entry.number)}. ${entry.word}${entry.plural ? ` (ج: ${entry.plural})` : ''}`;
+  const body = (entry.examples || [])
+    .map((ex, i) => `${CIRCLED_BY_INDEX[i] || '•'} ${ex.arabic}\n${ex.translation}`)
+    .join('\n\n');
+  return `${head}\nArti: ${entry.meaning}\n\nJumlah Mufidah:\n\n${body}\n`;
+}
+</script>
+
+<script>
+/* ==========================================================================
+   LOGIKA APLIKASI UTAMA, STATE, PENCARIAN, HAFALAN, TTS, DAN PDF A6
+   ========================================================================== */
+const KEY = 'mufradat:v1';
+const THEME_KEY = 'mufradat:theme';
+const SAMPLE_TEXT = "٣٤٣. مِنْبَرٌ (ج: مَنَابِرُ)\nArti: Mimbar\n\nJumlah Mufidah:\n\n① صَعِدَ الْخَطِيبُ الْمِنْبَرَ لِيُلْقِيَ خُطْبَةَ الْجُمُعَةِ.\nKhatib menaiki mimbar untuk menyampaikan khotbah Jumat.\n\n② صُنِعَ هٰذَا الْمِنْبَرُ مِنَ الْخَشَبِ الْفَاخِرِ.\nMimbar ini dibuat dari kayu yang mewah.\n\n③ يَقَعُ الْمِنْبَرُ عَلَى يَمِينِ الْمِحْرَابِ.\nMimbar terletak di sebelah kanan mihrab.\n\n٣٤٤. قَلَمٌ (ج: أَقْلَامٌ)\nArti: Pena\n\nJumlah Mufidah:\n\n① هٰذَا قَلَمٌ جَدِيدٌ.\nIni pena baru.\n\n② أَكْتُبُ بِالْقَلَمِ.\nSaya menulis dengan pena.\n\n③ الْقَلَمُ عَلَى الْمَكْتَبِ.\nPena ada di atas meja.\n";
+
+let mem = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* Notifikasi Toast */
+let toastTimer = null;
+function toast(msg) {
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+/* Penyalinan Teks ke Clipboard (Kompatibel Iframe) */
+function copyToClipboard(txt) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    return ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+/* Manajemen Tema Terang / Gelap */
+function applyTheme(t) {
+  if (t === 'dark' || t === 'light') {
+    document.documentElement.setAttribute('data-theme', t);
+    try { localStorage.setItem(THEME_KEY, t); } catch (e) {}
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  const isDark = t === 'dark' || (!t && window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches);
+  $('themeBtn').textContent = isDark ? '☀' : '☾';
+  $('themeBtn').title = isDark ? 'Beralih ke mode terang' : 'Beralih ke mode gelap';
+}
+try { applyTheme(localStorage.getItem(THEME_KEY)); } catch (e) { applyTheme(null); }
+$('themeBtn').onclick = () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches;
+  const next = cur ? (cur === 'dark' ? 'light' : 'dark') : (sysDark ? 'light' : 'dark');
+  applyTheme(next);
+};
+
+/* Penyimpanan Lokal (localStorage + Fallback Memori) */
+function load() {
+  try {
+    const r = localStorage.getItem(KEY);
+    if (r) return JSON.parse(r);
+  } catch (e) {}
+  return mem || [];
+}
+
+function strip(e) {
+  return {
+    number: e.number,
+    word: e.word,
+    plural: e.plural || '',
+    meaning: e.meaning,
+    examples: (e.examples || []).map(x => ({ arabic: x.arabic, translation: x.translation }))
+  };
+}
+
+let data = load();
+function save() {
+  data.sort((a, b) => a.number - b.number);
+  mem = data;
+  try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {}
+}
+const nums = () => data.map(d => d.number);
+
+/* Normalisasi Pencarian Cerdas (Abaikan Harakat, Samakan Alif, Angka Arab/Persia = Latin) */
+const norm = s => String(s)
+  .replace(/[\u064B-\u0652\u0670\u0640]/g, '')
+  .replace(/[أإآٱ]/g, 'ا')
+  .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
+  .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+  .toLowerCase();
+
+function hay(e) {
+  return norm([e.number, e.word, e.plural, e.meaning, ...e.examples.flatMap(x => [x.arabic, x.translation])].join(' \n '));
+}
+
+/* Sintesis Suara Bahasa Arab (Web Speech API) */
+const canSpeak = 'speechSynthesis' in window;
+function speakArabic(text) {
+  if (!canSpeak) {
+    toast('Browser tidak mendukung suara pelafalan.');
+    return;
+  }
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ar-SA';
+    u.rate = 0.88;
+    const voices = window.speechSynthesis.getVoices();
+    const arVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ar'));
+    if (arVoice) u.voice = arVoice;
+    window.speechSynthesis.speak(u);
+  } catch (e) {
+    toast('Audio pelafalan tidak tersedia di lingkungan ini.');
+  }
+}
+
+/* Mode Hafalan / Kuis */
+let quizMode = false;
+$('quizBtn').onclick = () => {
+  quizMode = !quizMode;
+  document.body.classList.toggle('quiz-mode', quizMode);
+  $('quizBtn').classList.toggle('active', quizMode);
+  $('quizBtn').setAttribute('aria-pressed', String(quizMode));
+  $('quizBanner').hidden = !quizMode;
+  document.querySelectorAll('.maskable.revealed').forEach(el => el.classList.remove('revealed'));
+};
+$('revealAllBtn').onclick = () => {
+  document.querySelectorAll('.maskable').forEach(el => el.classList.add('revealed'));
+};
+
+/* Penyaringan, Pengurutan & Paginasi */
+let pageLimit = 30;
+function getFilteredSorted() {
+  const q = norm($('q').value.trim());
+  const sort = $('sortSel').value;
+  let r = q ? data.filter(e => hay(e).includes(q)) : [...data];
+  if (sort === 'desc') r.sort((a, b) => b.number - a.number);
+  else if (sort === 'az') r.sort((a, b) => a.meaning.localeCompare(b.meaning, 'id'));
+  else r.sort((a, b) => a.number - b.number);
+  return r;
+}
+
+/* Template HTML Kartu Kosakata */
+function card(e, interactive = true) {
+  const ex = e.examples.map((x, i) => `
+    <div class="ex">
+      <div class="ex-ar">
+        <span class="circ">${toArabicIndic(i + 1)}</span>
+        <span class="ar">${esc(x.arabic)}</span>
+        ${interactive && canSpeak ? `<button class="spk mini" type="button" data-speak="${esc(x.arabic)}" title="Dengarkan kalimat" aria-label="Dengarkan kalimat">🔊</button>` : ''}
+      </div>
+      <div class="tr maskable">${esc(x.translation)}</div>
+    </div>`).join('');
+
+  return `
+  <article class="card">
+    <header>
+      <div class="mean maskable">${esc(e.meaning)}</div>
+      <div class="sep"></div>
+      <div class="ar-box">
+        <div class="ar head-ar">${esc(e.word)}</div>
+        ${e.plural ? `<span class="plural-tag">ج: ${esc(e.plural)}</span>` : ''}
+      </div>
+      <div class="no">${toArabicIndic(e.number)}</div>
+    </header>
+    <div class="body">
+      <div class="body-top">
+        <span class="chip">Jumlah Mufidah:</span>
+        ${interactive && canSpeak ? `<button class="spk" type="button" data-speak="${esc(e.word + (e.plural ? '، ' + e.plural : ''))}" title="Dengarkan pelafalan kata">🔊 Lafalkan</button>` : ''}
+      </div>
+      ${ex}
+    </div>
+    ${interactive ? `
+    <div class="card-foot">
+      <div class="foot-grp">
+        <button class="btn ghost sm" type="button" data-copy="${e.number}">📋 Salin</button>
+      </div>
+      <div class="foot-grp">
+        <button class="btn ghost sm" type="button" data-edit="${e.number}">✎ Edit</button>
+      </div>
+    </div>` : ''}
+  </article>`;
+}
+
+/* Render Daftar Kosakata */
+function render() {
+  const rawQ = $('q').value.trim();
+  $('qClear').hidden = !rawQ;
+  const r = getFilteredSorted();
+  const withPlural = data.filter(e => e.plural && e.plural.trim()).length;
+
+  $('count').textContent = rawQ ? `Menampilkan ${r.length} dari ${data.length} mufradat` : `Total ${data.length} mufradat`;
+  $('pluralCount').textContent = data.length ? `${withPlural} punya bentuk jamak` : '';
+
+  if (!r.length) {
+    $('moreWrap').hidden = true;
+    $('list').innerHTML = data.length
+      ? `<div class="empty"><div class="empty-icon">لَا يُوجَدُ</div><p>Tidak ada mufradat yang cocok dengan pencarian “${esc(rawQ)}”.</p><button class="btn ghost sm" type="button" id="resetSearchBtn">Reset Pencarian</button></div>`
+      : `<div class="empty"><div class="empty-icon">بَنْكُ الْمُفْرَدَاتِ</div><p>Belum ada kosakata tersimpan. Anda dapat menempel banyak mufradat sekaligus, menambah satu per satu, atau memuat contoh.</p><div class="empty-actions"><button class="btn sm" type="button" id="emptyImpBtn">Tambah Banyak</button><button class="btn ghost sm" type="button" id="emptyDemoBtn">Muat 2 Contoh</button></div></div>`;
+    const resetBtn = $('resetSearchBtn');
+    if (resetBtn) resetBtn.onclick = () => { $('q').value = ''; render(); };
+    const emptyImp = $('emptyImpBtn');
+    if (emptyImp) emptyImp.onclick = () => $('imp').click();
+    const emptyDemo = $('emptyDemoBtn');
+    if (emptyDemo) emptyDemo.onclick = () => loadDemoData();
+    return;
+  }
+
+  const visible = r.slice(0, pageLimit);
+  $('list').innerHTML = visible.map(e => card(e, true)).join('');
+  $('moreWrap').hidden = r.length <= pageLimit;
+  if (r.length > pageLimit) {
+    $('moreBtn').textContent = `Tampilkan lebih banyak (${r.length - pageLimit} tersisa)`;
+  }
+}
+
+$('q').addEventListener('input', () => { pageLimit = 30; render(); });
+$('qClear').onclick = () => { $('q').value = ''; pageLimit = 30; render(); $('q').focus(); };
+$('sortSel').onchange = () => { pageLimit = 30; render(); };
+$('moreBtn').onclick = () => { pageLimit += 30; render(); };
+
+/* Delegasi Event pada Daftar Kartu */
+$('list').addEventListener('click', ev => {
+  const mask = ev.target.closest('.maskable');
+  if (mask && quizMode) {
+    mask.classList.toggle('revealed');
+    return;
+  }
+
+  const spk = ev.target.closest('[data-speak]');
+  if (spk) {
+    speakArabic(spk.dataset.speak);
+    return;
+  }
+
+  const cp = ev.target.closest('[data-copy]');
+  if (cp) {
+    const entry = data.find(x => x.number === Number(cp.dataset.copy));
+    if (entry) {
+      const txt = toText(entry);
+      if (copyToClipboard(txt)) {
+        toast(`Mufradat ${toArabicIndic(entry.number)} disalin ke clipboard`);
+      } else {
+        toast('Gagal menyalin teks');
+      }
+    }
+    return;
+  }
+
+  const ed = ev.target.closest('[data-edit]');
+  if (ed) openForm(Number(ed.dataset.edit));
+});
+
+/* ==========================================================================
+   MODAL 1: TAMBAH / EDIT / HAPUS SATUAN
+   ========================================================================== */
+let editing = null, confirming = false, delConfirming = false;
+const fld = (id, lbl, v, cls = '', ph = '') => `<label for="${id}">${lbl}</label><input class="f ${cls}" id="${id}" value="${esc(v)}" placeholder="${ph}" autocomplete="off">`;
+
+function openForm(n) {
+  editing = n;
+  confirming = false;
+  delConfirming = false;
+  const e = n == null
+    ? { number: nextNumber(nums()), word: '', plural: '', meaning: '', examples: [{}, {}, {}] }
+    : data.find(x => x.number === n);
+
+  $('dt').textContent = n == null ? 'Tambah mufradat baru' : 'Edit mufradat ' + toArabicIndic(n);
+  $('ddel').hidden = n == null;
+  $('ddel').textContent = 'Hapus';
+  $('dform').innerHTML =
+    `<div class="row"><div class="n">${fld('fn', 'Nomor', e.number, '', '1')}</div><div>${fld('fm', 'Arti Bahasa Indonesia', e.meaning, '', 'Contoh: Mimbar')}</div></div>` +
+    `<div class="row"><div>${fld('fw', 'Kosakata Arab (berharakat)', e.word, 'rtl', 'مِنْبَرٌ')}</div><div>${fld('fp', 'Bentuk Jamak (opsional)', e.plural, 'rtl', 'مَنَابِرُ')}</div></div>` +
+    [0, 1, 2].map(i => `<fieldset><legend>Contoh ${toArabicIndic(i + 1)}</legend>${fld('fa' + i, 'Kalimat Arab (Jumlah Mufidah)', e.examples[i].arabic || '', 'rtl')}${fld('ft' + i, 'Terjemahan Indonesia', e.examples[i].translation || '')}</fieldset>`).join('');
+  $('dmsg').innerHTML = '';
+  $('dsave').textContent = 'Simpan';
+  $('dlg').showModal();
+}
+
+function readForm() {
+  const v = id => $(id).value.trim();
+  return {
+    number: digitsToInt(v('fn')),
+    word: v('fw'),
+    plural: v('fp'),
+    meaning: v('fm'),
+    examples: [0, 1, 2].map(i => ({ arabic: v('fa' + i), translation: v('ft' + i) }))
+  };
+}
+
+function showIssues(is) {
+  $('dmsg').innerHTML = is.map(i => `<div class="${i.level == 'error' ? 'e' : 'w'}">${i.level == 'error' ? '✕' : '!'} ${esc(i.message)}</div>`).join('');
+}
+
+$('add').onclick = () => openForm(null);
+$('dcancel').onclick = () => $('dlg').close();
+
+$('ddel').onclick = () => {
+  if (editing == null) return;
+  if (!delConfirming) {
+    delConfirming = true;
+    confirming = false;
+    $('dsave').textContent = 'Simpan';
+    $('dmsg').innerHTML = '<div class="e">Tekan “Ya, hapus” sekali lagi untuk menghapus mufradat ini secara permanen.</div>';
+    $('ddel').textContent = 'Ya, hapus';
+    return;
+  }
+  const delNum = editing;
+  data = data.filter(x => x.number !== delNum);
+  save();
+  $('dlg').close();
+  render();
+  toast(`Mufradat ${toArabicIndic(delNum)} dihapus`);
+};
+
+$('dsave').onclick = () => {
+  const e = readForm();
+  const is = validateEntry(e, { existingNumbers: nums(), ignoreNumber: editing });
+  delConfirming = false;
+  $('ddel').textContent = 'Hapus';
+
+  if (is.some(i => i.level == 'error')) {
+    confirming = false;
+    $('dsave').textContent = 'Simpan';
+    return showIssues(is);
+  }
+  if (editing != null && !confirming) {
+    confirming = true;
+    showIssues(is);
+    $('dmsg').insertAdjacentHTML('afterbegin', '<div class="o">Perubahan siap disimpan. Tekan tombol simpan sekali lagi untuk mengonfirmasi.</div>');
+    $('dsave').textContent = 'Ya, simpan perubahan';
+    return;
+  }
+  if (editing == null) {
+    data.push(e);
+    toast(`Mufradat ${toArabicIndic(e.number)} ditambahkan`);
+  } else {
+    data[data.findIndex(x => x.number === editing)] = e;
+    toast(`Mufradat ${toArabicIndic(e.number)} diperbarui`);
+  }
+  save();
+  $('dlg').close();
+  render();
+};
+
+/* ==========================================================================
+   MODAL 2: TAMBAH BANYAK SEKALIGUS (IMPOR TEKS MASSAL)
+   ========================================================================== */
+let rep = null, tm = null;
+$('imp').onclick = () => { $('itxt').value = ''; check(); $('idlg').showModal(); $('itxt').focus(); };
+$('iclose').onclick = () => $('idlg').close();
+$('sampleFmtBtn').onclick = () => {
+  const start = nextNumber(nums());
+  const sample = SAMPLE_TEXT
+    .replace('٣٤٣.', toArabicIndic(start) + '.')
+    .replace('٣٤٤.', toArabicIndic(start + 1) + '.');
+  $('itxt').value = ($('itxt').value.trim() ? $('itxt').value.trim() + '\n\n' : '') + sample;
+  check();
+};
+$('itxt').addEventListener('input', () => { clearTimeout(tm); tm = setTimeout(check, 220); });
+
+function check() {
+  const t = $('itxt').value;
+  $('iprev').innerHTML = '';
+  if (!t.trim()) {
+    rep = null;
+    $('irep').innerHTML = '';
+    $('isave').disabled = true;
+    $('isave').textContent = 'Simpan';
+    return;
+  }
+  rep = parseMufradat(t, { existingNumbers: nums() });
+  const s = rep.summary;
+  let h = `<div class="rep">${s.total} entri terbaca: <span class="o">${s.valid} valid</span>, <span class="e">${s.invalid} bermasalah</span>, ${s.warnings} peringatan.</div>`;
+  rep.globalIssues.forEach(i => h += `<div class="rep ${i.level == 'error' ? 'e' : 'w'}">${esc(i.message)}</div>`);
+  rep.entries.filter(e => e.issues.length).forEach(e => {
+    h += `<div class="rep"><b>${e.numberDisplay || '?'} ${esc(e.word)}</b> (baris ${e.startLine}) ${e.valid ? '<span class="o">siap disimpan</span>' : '<span class="e">perlu diperbaiki</span>'}` +
+      e.issues.map(i => `<div class="${i.level == 'error' ? 'e' : 'w'}">${i.level == 'error' ? '✕' : '!'} ${esc(i.message)}</div>`).join('') + '</div>';
+  });
+  $('irep').innerHTML = h;
+  $('iprev').innerHTML = rep.entries.filter(e => e.valid).map(e => card(e, false)).join('');
+  $('isave').disabled = !s.valid;
+  $('isave').textContent = `Simpan ${s.valid} entri`;
+}
+
+$('isave').onclick = () => {
+  if (!rep) return;
+  const ok = rep.entries.filter(e => e.valid);
+  ok.forEach(e => data.push(strip(e)));
+  save();
+  $('itxt').value = rep.entries.filter(e => !e.valid).map(e => e.raw).join('\n\n');
+  render();
+  toast(`${ok.length} mufradat berhasil disimpan`);
+  if ($('itxt').value) {
+    check();
+    $('irep').insertAdjacentHTML('afterbegin', `<div class="rep o">${ok.length} entri disimpan. Entri bermasalah tetap di kolom teks agar bisa diperbaiki.</div>`);
+  } else {
+    $('idlg').close();
+  }
+};
+
+/* ==========================================================================
+   MODAL 4: DATA, CADANGAN JSON, EKSPOR TEKS & CONTOH
+   ========================================================================== */
+function downloadFile(filename, content, mime) {
+  const blob = content instanceof Blob ? content : new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1200);
+}
+
+function loadDemoData() {
+  const existing = new Set(nums());
+  const parsed = parseMufradat(SAMPLE_TEXT, { existingNumbers: nums() }).entries.filter(e => e.valid && !existing.has(e.number));
+  if (!parsed.length) {
+    toast('Nomor contoh (٣٤٣ & ٣٤٤) sudah ada di daftar.');
+    return;
+  }
+  parsed.forEach(e => data.push(strip(e)));
+  save();
+  render();
+  toast(`${parsed.length} contoh mufradat dimuat`);
+}
+
+let clearArmed = false;
+$('dataBtn').onclick = () => {
+  clearArmed = false;
+  $('clearAllBtn').textContent = 'Kosongkan Semua Data';
+  $('dataMsg').innerHTML = '';
+  $('dataDlg').showModal();
+};
+$('dataClose').onclick = () => $('dataDlg').close();
+
+$('expJsonBtn').onclick = () => {
+  if (!data.length) {
+    $('dataMsg').innerHTML = '<div class="w">Belum ada data untuk dicadangkan.</div>';
+    return;
+  }
+  const stamp = new Date().toISOString().slice(0, 10);
+  downloadFile(`Bank-Kosakata-Backup-${stamp}.json`, JSON.stringify(data, null, 2), 'application/json');
+  $('dataMsg').innerHTML = `<div class="o">Cadangan JSON (${data.length} mufradat) berhasil diunduh.</div>`;
+};
+
+$('impJsonBtn').onclick = () => $('impJsonFile').click();
+$('impJsonFile').onchange = async ev => {
+  const file = ev.target.files && ev.target.files[0];
+  ev.target.value = '';
+  if (!file) return;
+  try {
+    const arr = JSON.parse(await file.text());
+    if (!Array.isArray(arr)) throw new Error('Format JSON harus berupa array entri.');
+    const existing = new Set(nums());
+    let added = 0, skipped = 0;
+    arr.forEach(raw => {
+      const cleanEntry = strip(raw);
+      const issues = validateEntry(cleanEntry, { existingNumbers: [...existing] });
+      if (!issues.some(i => i.level === 'error')) {
+        data.push(cleanEntry);
+        existing.add(cleanEntry.number);
+        added++;
+      } else {
+        skipped++;
+      }
+    });
+    save();
+    render();
+    $('dataMsg').innerHTML = `<div class="o">Impor selesai: ${added} mufradat baru ditambahkan${skipped ? `, ${skipped} dilewati (duplikat/tidak valid)` : ''}.</div>`;
+  } catch (err) {
+    $('dataMsg').innerHTML = `<div class="e">Gagal membaca file JSON: ${esc(err.message || err)}</div>`;
+  }
+};
+
+$('expTxtBtn').onclick = () => {
+  if (!data.length) {
+    $('dataMsg').innerHTML = '<div class="w">Belum ada data untuk diekspor.</div>';
+    return;
+  }
+  const sorted = [...data].sort((a, b) => a.number - b.number);
+  const content = sorted.map(toText).join('\n');
+  const stamp = new Date().toISOString().slice(0, 10);
+  downloadFile(`Bank-Kosakata-${stamp}.txt`, content, 'text/plain;charset=utf-8');
+  $('dataMsg').innerHTML = `<div class="o">File teks (${sorted.length} mufradat) berhasil diunduh.</div>`;
+};
+
+$('loadDemoBtn').onclick = () => {
+  loadDemoData();
+  $('dataDlg').close();
+};
+
+$('clearAllBtn').onclick = () => {
+  if (!data.length) {
+    $('dataMsg').innerHTML = '<div class="w">Data sudah kosong.</div>';
+    return;
+  }
+  if (!clearArmed) {
+    clearArmed = true;
+    $('clearAllBtn').textContent = 'Ya, Hapus Semua';
+    $('dataMsg').innerHTML = '<div class="e">Peringatan: Tindakan ini akan menghapus seluruh kosakata dari browser ini. Tekan “Ya, Hapus Semua” untuk melanjutkan.</div>';
+    return;
+  }
+  data = [];
+  save();
+  render();
+  $('dataDlg').close();
+  toast('Seluruh data kosakata telah dikosongkan');
+};
+
+/* ==========================================================================
+   MODAL 3 & MESIN EKSPOR PDF UKURAN A6 (2 KARTU PER HALAMAN, MURNI CANVAS)
+   ========================================================================== */
+const C = { blue: '#134b80', head: '#dceeff', chip: '#e8f1fb', line: '#c9dcef', ink: '#16202e' };
+const AR = 'Amiri,"Noto Naskh Arabic","Traditional Arabic",serif', LA = 'Helvetica,Arial,sans-serif';
+const PW = 397, PH = 559, S = 3, CW = 520;
+
+function wrap(c, t, w) {
+  const o = [];
+  let l = '';
+  for (const x of String(t).split(/\s+/).filter(Boolean)) {
+    const n = l ? l + ' ' + x : x;
+    if (l && c.measureText(n).width > w) { o.push(l); l = x; } else l = n;
+  }
+  if (l) o.push(l);
+  return o.length ? o : [''];
+}
+
+function rr(c, x, y, w, h, r) {
+  c.beginPath();
+  c.moveTo(x + r, y);
+  c.arcTo(x + w, y, x + w, y + h, r);
+  c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r);
+  c.arcTo(x, y, x + w, y, r);
+  c.closePath();
+}
+
+/* Menggambar satu kartu kosakata pada canvas PDF */
+function drawCard(c, e, W, dry) {
+  const set = (f, d) => { c.font = f; c.direction = d; };
+  c.textBaseline = 'middle';
+  const nb = toArabicIndic(e.number);
+  set(`700 20px ${AR}`, 'rtl');
+  const bw = Math.max(40, c.measureText(nb).width + 16);
+  const inner = W - 28 - bw - 37, mw = inner / 2.7, aw = inner * 1.7 / 2.7;
+
+  set(`700 13px ${LA}`, 'ltr');
+  const ml = wrap(c, e.meaning, mw);
+
+  set(`700 26px ${AR}`, 'rtl');
+  const al = wrap(c, e.word + (e.plural ? ' ج: ' + e.plural : ''), aw);
+
+  const hh = Math.max(73, al.length * 49 + 24, ml.length * 19 + 24);
+  let y = hh + 40;
+  const rows = [], n = e.examples.length;
+
+  e.examples.forEach((x, i) => {
+    set(`400 21px ${AR}`, 'rtl');
+    const a = wrap(c, x.arabic, W - 66);
+    set(`13px ${LA}`, 'ltr');
+    const t = wrap(c, x.translation, W - 32);
+    const ah = Math.max(26, a.length * 44.1), th = t.length * 18.85;
+    rows.push({ a, t, y, ah, th });
+    y += 8 + ah + 2 + th + (i < n - 1 ? 11 : 0);
+  });
+
+  const H = y + 14;
+  if (dry) return H;
+
+  c.save();
+  rr(c, 0, 0, W, H, 16);
+  c.fillStyle = '#fff'; c.fill(); c.clip();
+
+  c.fillStyle = C.head; c.fillRect(0, 0, W, hh);
+  const sx = 16 + mw + 12;
+  c.globalAlpha = .8; c.fillStyle = C.blue; c.fillRect(sx, 12, 1, hh - 24); c.globalAlpha = 1;
+
+  set(`700 13px ${LA}`, 'ltr'); c.textAlign = 'left'; c.fillStyle = C.blue;
+  ml.forEach((l, i) => c.fillText(l, 16, hh / 2 + (i - (ml.length - 1) / 2) * 19));
+
+  set(`700 26px ${AR}`, 'rtl'); c.textAlign = 'center'; c.fillStyle = C.ink;
+  const cx = sx + 13 + aw / 2;
+  al.forEach((l, i) => c.fillText(l, cx, hh / 2 + (i - (al.length - 1) / 2) * 49 + 5));
+
+  const bx = W - 12 - bw;
+  c.fillStyle = C.blue; rr(c, bx, hh / 2 - 18, bw, 36, 8); c.fill();
+  c.fillStyle = '#fff'; set(`700 20px ${AR}`, 'rtl'); c.textAlign = 'center';
+  c.fillText(nb, bx + bw / 2, hh / 2 + 3);
+
+  const ct = 'Jumlah Mufidah:';
+  set(`700 12.5px ${LA}`, 'ltr');
+  const cw = c.measureText(ct).width + 32;
+  c.fillStyle = C.chip; rr(c, 16, hh + 12, cw, 28, 14); c.fill();
+  c.fillStyle = C.blue; c.textAlign = 'left'; c.fillText(ct, 32, hh + 26);
+
+  rows.forEach((r, i) => {
+    const y0 = r.y + 8, cy = y0 + r.ah / 2;
+    c.strokeStyle = C.blue; c.lineWidth = 1.5;
+    c.beginPath(); c.arc(W - 29, cy, 12.25, 0, 7); c.stroke();
+    c.fillStyle = C.blue; set(`400 15px ${AR}`, 'rtl'); c.textAlign = 'center';
+    c.fillText(toArabicIndic(i + 1), W - 29, cy + 3);
+
+    c.fillStyle = C.ink; set(`400 21px ${AR}`, 'rtl'); c.textAlign = 'right';
+    r.a.forEach((l, k) => c.fillText(l, W - 50, y0 + (k + .5) * 44.1 + 5));
+
+    set(`13px ${LA}`, 'ltr'); c.textAlign = 'left';
+    r.t.forEach((l, k) => c.fillText(l, 16, y0 + r.ah + 2 + (k + .5) * 18.85));
+
+    if (i < n - 1) { c.fillStyle = C.line; c.fillRect(16, y0 + r.ah + 2 + r.th + 10, W - 32, 1); }
+  });
+
+  c.restore();
+  c.strokeStyle = C.blue; c.lineWidth = 1.5;
+  rr(c, .75, .75, W - 1.5, H - 1.5, 16); c.stroke();
+  return H;
+}
+
+/* Menyusun file biner PDF 1.4 tanpa pustaka eksternal */
+function makePDF(jp, pw, ph) {
+  const te = new TextEncoder(), parts = [], offs = [];
+  let len = 0;
+  const put = x => { const b = typeof x === 'string' ? te.encode(x) : x; parts.push(b); len += b.length; };
+  const obj = (i, f) => { offs[i] = len; put(i + ' 0 obj\n'); f(); put('\nendobj\n'); };
+  const N = jp.length;
+  put('%PDF-1.4\n');
+  obj(1, () => put('<< /Type /Catalog /Pages 2 0 R >>'));
+  obj(2, () => put(`<< /Type /Pages /Count ${N} /Kids [${jp.map((_, i) => (5 + i * 3) + ' 0 R').join(' ')}] >>`));
+  jp.forEach((j, i) => {
+    const a = 3 + i * 3, s = `q ${pw} 0 0 ${ph} 0 0 cm /Im0 Do Q`;
+    obj(a, () => { put(`<< /Type /XObject /Subtype /Image /Width ${PW * S} /Height ${PH * S} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${j.length} >>\nstream\n`); put(j); put('\nendstream'); });
+    obj(a + 1, () => put(`<< /Length ${s.length} >>\nstream\n${s}\nendstream`));
+    obj(a + 2, () => put(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pw} ${ph}] /Resources << /XObject << /Im0 ${a} 0 R >> >> /Contents ${a + 1} 0 R >>`));
+  });
+  const tot = 2 + N * 3, x = len;
+  put(`xref\n0 ${tot + 1}\n0000000000 65535 f \n`);
+  for (let i = 1; i <= tot; i++) put(String(offs[i]).padStart(10, '0') + ' 00000 n \n');
+  put(`trailer\n<< /Size ${tot + 1} /Root 1 0 R >>\nstartxref\n${x}\n%%EOF`);
+  return new Blob(parts, { type: 'application/pdf' });
+}
+
+const jpegOf = async cv => cv.toBlob
+  ? new Uint8Array(await (await new Promise(r => cv.toBlob(r, 'image/jpeg', .92))).arrayBuffer())
+  : new Uint8Array(await cv.encode('jpeg', 92));
+
+/* Membangun halaman A6 berisi maksimal 2 kartu + footer nomor halaman Arab Timur */
+async function buildPDF(list, mk, onPage) {
+  const cv = mk(PW * S, PH * S), c = cv.getContext('2d'), jp = [], total = Math.ceil(list.length / 2);
+  for (let i = 0; i < list.length; i += 2) {
+    const g = list.slice(i, i + 2), pg = i / 2 + 1;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = '#fff'; c.fillRect(0, 0, cv.width, cv.height);
+    c.setTransform(S, 0, 0, S, 0, 0);
+    const hs = g.map(e => drawCard(c, e, CW, true)), gap = 12;
+    const s = Math.min(345 / CW, (493 - gap * (g.length - 1)) / hs.reduce((a, b) => a + b, 0));
+    let y = 22;
+    const x = (PW - CW * s) / 2;
+    g.forEach((e, k) => {
+      c.save(); c.translate(x, y); c.scale(s, s);
+      drawCard(c, e, CW, false);
+      c.restore();
+      y += hs[k] * s + gap;
+    });
+    const fy = PH - 26;
+    c.strokeStyle = C.blue; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(26, fy); c.lineTo(PW / 2 - 22, fy); c.moveTo(PW / 2 + 22, fy); c.lineTo(PW - 26, fy); c.stroke();
+    c.fillStyle = C.blue; c.font = `400 16px ${AR}`; c.direction = 'rtl'; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText(toArabicIndic(pg), PW / 2, fy + 3);
+    jp.push(await jpegOf(cv));
+    if (onPage) onPage(pg, total);
+    await new Promise(r => setTimeout(r));
+  }
+  return makePDF(jp, 297.64, 419.53);
+}
+
+/* Trigger Dialog Ekspor PDF */
+$('pdf').onclick = () => {
+  if (!data.length) { toast('Belum ada mufradat untuk diekspor.'); return; }
+  const filtered = getFilteredSorted();
+  const hasFilter = $('q').value.trim().length > 0;
+  $('pdfScope').options[0].textContent = `Semua kosakata (${data.length})`;
+  $('pdfScope').options[1].textContent = `Hasil pencarian saat ini (${filtered.length})`;
+  $('pdfScope').options[1].disabled = !hasFilter || !filtered.length;
+  $('pdfScope').value = hasFilter && filtered.length ? 'filtered' : 'all';
+  $('pdfMsg').innerHTML = '';
+  $('pdfGo').disabled = false;
+  $('pdfDlg').showModal();
+};
+$('pdfCancel').onclick = () => $('pdfDlg').close();
+
+$('pdfGo').onclick = async () => {
+  const scope = $('pdfScope').value;
+  const order = $('pdfOrder').value;
+  let target = scope === 'filtered' ? getFilteredSorted() : [...data];
+  target.sort((a, b) => order === 'desc' ? b.number - a.number : a.number - b.number);
+  if (!target.length) { $('pdfMsg').innerHTML = '<div class="w">Tidak ada mufradat yang dipilih.</div>'; return; }
+
+  const b = $('pdfGo');
+  b.disabled = true;
+  try {
+    await Promise.all(['700 26px Amiri', '400 21px Amiri', '700 20px Amiri', '400 15px Amiri'].map(f => document.fonts.load(f, 'غُرْفَةٌ')));
+    const blob = await buildPDF(
+      target,
+      (w, h) => { const k = document.createElement('canvas'); k.width = w; k.height = h; return k; },
+      (p, t) => { $('pdfMsg').innerHTML = `<div class="o">Membuat halaman ${p} dari ${t}…</div>`; }
+    );
+    downloadFile(`Bank-Kosakata-A6-${target.length}-kata.pdf`, blob, 'application/pdf');
+    $('pdfDlg').close();
+    toast(`PDF A6 (${Math.ceil(target.length / 2)} halaman) siap diunduh`);
+  } catch (err) {
+    $('pdfMsg').innerHTML = `<div class="e">Ekspor gagal: ${esc((err && err.message) || err)}</div>`;
+  }
+  b.disabled = false;
+};
+
+/* Inisialisasi Awal */
+if (canSpeak) {
+  try { window.speechSynthesis.getVoices(); } catch (e) {}
+}
+render();
+</script>
+</body>
+</html>
